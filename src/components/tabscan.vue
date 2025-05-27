@@ -21,7 +21,9 @@
         <div class="preview-container" :style="{display: imagePreview ? 'flex' : 'none'}">
           <h3 class="preview-title">Pratinjau Gambar</h3>
           <img :src="imagePreview" class="image-preview" alt="Preview">
-          <button class="analyze-btn" @click="analyzeImage" :disabled="!imagePreview">Analisis Gambar</button>
+          <button class="analyze-btn" @click="analyzeImage" :disabled="!imagePreview || isLoading">
+            {{ isLoading ? 'Menganalisis...' : 'Analisis Gambar' }}
+          </button>
         </div>
 
         <div class="loading" :style="{display: isLoading ? 'block' : 'none'}">
@@ -30,20 +32,42 @@
         </div>
       </section>
 
+      <!-- Modal Kamera -->
+      <div class="modal-overlay" v-if="showCameraModal" @click.self="closeCamera">
+        <div class="modal-content">
+          <span class="close-modal" @click="closeCamera">&times;</span>
+          <h2>Ambil Foto</h2>
+
+          <div class="camera-container">
+            <video ref="videoElement" autoplay playsinline class="camera-preview"></video>
+            <canvas ref="canvasElement" style="display: none;"></canvas>
+
+            <div class="camera-controls">
+              <button @click="takePicture" class="capture-btn">
+                <i class="fas fa-camera"></i>
+              </button>
+              <button @click="switchCamera" class="switch-btn">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Results Section -->
-      <section class="results-section" v-if="analysisResult" style="display: block;">
+      <section class="results-section" v-if="analysisResult">
         <h2 class="results-title">Hasil Analisis</h2>
         <div class="result-card">
           <div class="waste-icon">
-            <i :class="wasteIcon"></i>
+            <i :class="analysisResult.icon"></i>
           </div>
-          <h3 class="waste-type">{{ analysisResult?.type }}</h3>
-          <p class="waste-description">{{ analysisResult?.description }}</p>
+          <h3 class="waste-type">{{ analysisResult.type }}</h3>
+          <p class="waste-description">{{ analysisResult.description }}</p>
 
           <div class="disposal-info">
             <h4 class="disposal-title">Cara Pembuangan yang Tepat:</h4>
             <ul class="disposal-steps">
-              <li v-for="(step, index) in analysisResult?.disposalSteps" :key="index">{{ step }}</li>
+              <li v-for="(step, index) in analysisResult.disposalSteps" :key="index">{{ step }}</li>
             </ul>
           </div>
         </div>
@@ -53,7 +77,7 @@
       <section class="history-section" v-if="analysisHistory.length > 0">
         <h2 class="history-title">Riwayat Analisis</h2>
         <div class="history-items">
-          <div class="history-item" v-for="(item, index) in analysisHistory" :key="index" @click="openHistoryModal(item)">
+          <div class="history-item" v-for="(item, index) in analysisHistory" :key="index" @click="showHistoryItem(item)">
             <img :src="item.image" class="history-image" alt="History Image">
             <div class="history-type">{{ item.result.type }}</div>
             <div class="history-date">{{ formatDate(item.timestamp) }}</div>
@@ -62,22 +86,22 @@
       </section>
 
       <!-- History Modal -->
-      <div class="modal-overlay" :style="{display: isModalOpen ? 'flex' : 'none'}" @click.self="closeModal">
+      <div class="modal-overlay" v-if="isModalOpen" @click.self="closeModal">
         <div class="modal-content" v-if="selectedHistoryItem">
           <span class="close-modal" @click="closeModal">&times;</span>
           <h2>Detail Analisis</h2>
           <div class="result-card">
-            <img :src="selectedHistoryItem?.image" class="image-preview" style="max-height: 300px; margin-bottom: 20px;" alt="Detail Image">
+            <img :src="selectedHistoryItem.image" class="image-preview" style="max-height: 300px; margin-bottom: 20px;" alt="Detail Image">
             <div class="waste-icon">
-              <i :class="getWasteIcon(selectedHistoryItem?.result?.type)"></i>
+              <i :class="selectedHistoryItem.result.icon"></i>
             </div>
-            <h3 class="waste-type">{{ selectedHistoryItem?.result?.type }}</h3>
-            <p class="waste-description">{{ selectedHistoryItem?.result?.description }}</p>
+            <h3 class="waste-type">{{ selectedHistoryItem.result.type }}</h3>
+            <p class="waste-description">{{ selectedHistoryItem.result.description }}</p>
 
             <div class="disposal-info">
               <h4 class="disposal-title">Cara Pembuangan yang Tepat:</h4>
               <ul class="disposal-steps">
-                <li v-for="(step, index) in selectedHistoryItem?.result?.disposalSteps" :key="index">{{ step }}</li>
+                <li v-for="(step, index) in selectedHistoryItem.result.disposalSteps" :key="index">{{ step }}</li>
               </ul>
             </div>
           </div>
@@ -88,60 +112,22 @@
 </template>
 
 <script>
+import axios from 'axios';  // Tambahkan ini
+
 export default {
   name: 'TabScan',
   data() {
     return {
       imagePreview: null,
+      uploadedFile: null,
+      showCameraModal: false,
+      videoStream: null,
+      currentFacingMode: 'environment', // 'user' untuk depan, 'environment' untuk belakang
       analysisResult: null,
       isLoading: false,
       analysisHistory: [],
       isModalOpen: false,
-      selectedHistoryItem: null,
-      wasteTypes: {
-        'Organik': {
-          description: 'Sampah organik berasal dari bahan-bahan alami yang dapat terurai secara biologis seperti sisa makanan, daun, dan ranting.',
-          disposalSteps: [
-            'Pisahkan dari sampah anorganik',
-            'Buang di tempat sampah organik',
-            'Bisa digunakan untuk kompos jika memungkinkan'
-          ],
-          icon: 'fas fa-leaf'
-        },
-        'Anorganik': {
-          description: 'Sampah anorganik adalah sampah yang tidak dapat terurai secara alami seperti plastik, kaca, dan logam.',
-          disposalSteps: [
-            'Pisahkan berdasarkan jenis material (plastik, kaca, logam)',
-            'Cuci bersih jika terkontaminasi makanan',
-            'Buang di tempat sampah daur ulang atau tempat sampah anorganik'
-          ],
-          icon: 'fas fa-recycle'
-        },
-        'B3 (Bahan Berbahaya dan Beracun)': {
-          description: 'Sampah B3 mengandung bahan berbahaya seperti baterai, elektronik, dan bahan kimia yang memerlukan penanganan khusus.',
-          disposalSteps: [
-            'Jangan dibuang bersama sampah biasa',
-            'Bawa ke tempat pengumpulan sampah B3',
-            'Hubungi layanan pengelolaan limbah berbahaya di daerah Anda'
-          ],
-          icon: 'fas fa-biohazard'
-        },
-        'Kertas': {
-          description: 'Sampah kertas termasuk koran, kardus, dan kertas kemasan yang dapat didaur ulang.',
-          disposalSteps: [
-            'Pisahkan dari sampah basah',
-            'Lipat atau potong untuk menghemat ruang',
-            'Buang di tempat sampah kertas atau bawa ke bank sampah'
-          ],
-          icon: 'fas fa-file-alt'
-        }
-      }
-    }
-  },
-  computed: {
-    wasteIcon() {
-      if (!this.analysisResult) return '';
-      return this.wasteTypes[this.analysisResult.type].icon;
+      selectedHistoryItem: null
     }
   },
   methods: {
@@ -151,6 +137,7 @@ export default {
     handleFileUpload(event) {
       const file = event.target.files[0];
       if (file) {
+        this.uploadedFile = file;
         const reader = new FileReader();
         reader.onload = (e) => {
           this.imagePreview = e.target.result;
@@ -158,47 +145,125 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    openCamera() {
-      alert('Fitur kamera akan diaktifkan di perangkat yang mendukung. Untuk sekarang, silakan unggah gambar.');
+    async openCamera() {
+      this.showCameraModal = true;
+      await this.$nextTick(); // Tunggu sampai modal render
+      this.startCamera();
     },
-    analyzeImage() {
+
+    async startCamera() {
+      try {
+        const constraints = {
+          video: {
+            facingMode: this.currentFacingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+          }
+        };
+
+        this.videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+        this.$refs.videoElement.srcObject = this.videoStream;
+      } catch (error) {
+        console.error("Error accessing camera:", error);
+        alert("Tidak dapat mengakses kamera. Pastikan Anda memberikan izin.");
+        this.closeCamera();
+      }
+    },
+
+    takePicture() {
+      const video = this.$refs.videoElement;
+      const canvas = this.$refs.canvasElement;
+
+      // Set canvas size sama dengan video
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // Gambar frame video ke canvas
+      const context = canvas.getContext('2d');
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Konversi ke blob dan simpan
+      canvas.toBlob((blob) => {
+        this.uploadedFile = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+
+        // Buat preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.imagePreview = e.target.result;
+          this.closeCamera();
+        };
+        reader.readAsDataURL(blob);
+      }, 'image/jpeg', 0.9);
+    },
+
+    async switchCamera() {
+      this.currentFacingMode = this.currentFacingMode === 'user' ? 'environment' : 'user';
+
+      // Stop stream sebelumnya
+      if (this.videoStream) {
+        this.videoStream.getTracks().forEach(track => track.stop());
+      }
+
+      // Mulai dengan mode baru
+      await this.startCamera();
+    },
+
+    closeCamera() {
+      // Stop stream kamera
+      if (this.videoStream) {
+        this.videoStream.getTracks().forEach(track => track.stop());
+        this.videoStream = null;
+      }
+
+      this.showCameraModal = false;
+    },
+
+    async analyzeImage() {
+      if (!this.uploadedFile) return;
+
       this.isLoading = true;
 
-      // Simulate API call with timeout
-      setTimeout(() => {
-        // Randomly select a waste type for demo purposes
-        const types = Object.keys(this.wasteTypes);
-        const randomType = types[Math.floor(Math.random() * types.length)];
+      try {
+        const formData = new FormData();
+        formData.append('image', this.uploadedFile);
 
-        this.analysisResult = {
-          type: randomType,
-          description: this.wasteTypes[randomType].description,
-          disposalSteps: this.wasteTypes[randomType].disposalSteps
-        };
+        // Send to backend API
+        const response = await axios.post('http://localhost:8080/analyze-image', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+
+        this.analysisResult = response.data;
 
         // Add to history
         this.analysisHistory.unshift({
           image: this.imagePreview,
-          result: {...this.analysisResult},
+          result: { ...this.analysisResult },
           timestamp: new Date()
         });
 
+      } catch (error) {
+        console.error('Error analyzing image:', error);
+        alert('Gagal menganalisis gambar. Silakan coba lagi.');
+      } finally {
         this.isLoading = false;
-      }, 2000);
+      }
     },
     formatDate(date) {
       return new Date(date).toLocaleString();
     },
-    openHistoryModal(item) {
+    showHistoryItem(item) {
       this.selectedHistoryItem = item;
       this.isModalOpen = true;
     },
     closeModal() {
       this.isModalOpen = false;
       this.selectedHistoryItem = null;
-    },
-    getWasteIcon(type) {
-      return this.wasteTypes[type].icon;
+    }
+  },
+  beforeUnmount() {
+    // Cleanup kamera
+    if (this.videoStream) {
+      this.videoStream.getTracks().forEach(track => track.stop());
     }
   }
 }
@@ -444,6 +509,59 @@ export default {
   color: #888;
 }
 
+
+/* Camera Modal Styles */
+.camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.camera-preview {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 70vh;
+  background: #000;
+  border-radius: 8px;
+  display: block;
+}
+
+.camera-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.capture-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.switch-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: white;
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
@@ -456,7 +574,6 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  display: none;
 }
 
 .modal-content {
