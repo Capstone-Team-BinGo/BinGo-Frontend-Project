@@ -10,7 +10,13 @@
           <div class="upload-btn" @click="triggerFileInput">
             <i class="fas fa-upload"></i>
             <span>Unggah Gambar</span>
-            <input type="file" class="file-input" accept="image/*" @change="handleFileUpload" ref="fileInput">
+            <input
+              type="file"
+              class="file-input"
+              accept="image/*"
+              @change="handleFileUpload"
+              ref="fileInput"
+            />
           </div>
           <div class="upload-btn" @click="openCamera">
             <i class="fas fa-camera"></i>
@@ -18,29 +24,45 @@
           </div>
         </div>
 
-        <div class="preview-container" :style="{display: imagePreview ? 'flex' : 'none'}">
+        <div
+          class="preview-container"
+          :style="{ display: imagePreview ? 'flex' : 'none' }"
+        >
           <h3 class="preview-title">Pratinjau Gambar</h3>
-          <img :src="imagePreview" class="image-preview" alt="Preview">
-          <button class="analyze-btn" @click="analyzeImage" :disabled="!imagePreview || isLoading">
+          <img :src="imagePreview" class="image-preview" alt="Preview" />
+          <button
+            class="analyze-btn"
+            @click="analyzeImage"
+            :disabled="!imagePreview || isLoading"
+          >
             {{ isLoading ? 'Menganalisis...' : 'Analisis Gambar' }}
           </button>
         </div>
 
-        <div class="loading" :style="{display: isLoading ? 'block' : 'none'}">
+        <div class="loading" :style="{ display: isLoading ? 'block' : 'none' }">
           <div class="spinner"></div>
           <p>Sedang menganalisis gambar...</p>
         </div>
       </section>
 
       <!-- Modal Kamera -->
-      <div class="modal-overlay" v-if="showCameraModal" @click.self="closeCamera">
+      <div
+        class="modal-overlay"
+        v-if="showCameraModal"
+        @click.self="closeCamera"
+      >
         <div class="modal-content">
           <span class="close-modal" @click="closeCamera">&times;</span>
           <h2>Ambil Foto</h2>
 
           <div class="camera-container">
-            <video ref="videoElement" autoplay playsinline class="camera-preview"></video>
-            <canvas ref="canvasElement" style="display: none;"></canvas>
+            <video
+              ref="videoElement"
+              autoplay
+              playsinline
+              class="camera-preview"
+            ></video>
+            <canvas ref="canvasElement" style="display: none"></canvas>
 
             <div class="camera-controls">
               <button @click="takePicture" class="capture-btn">
@@ -67,7 +89,12 @@
           <div class="disposal-info">
             <h4 class="disposal-title">Cara Pembuangan yang Tepat:</h4>
             <ul class="disposal-steps">
-              <li v-for="(step, index) in analysisResult.disposalSteps" :key="index">{{ step }}</li>
+              <li
+                v-for="(step, index) in analysisResult.disposalSteps"
+                :key="index"
+              >
+                {{ step }}
+              </li>
             </ul>
           </div>
         </div>
@@ -77,8 +104,13 @@
       <section class="history-section" v-if="analysisHistory.length > 0">
         <h2 class="history-title">Riwayat Analisis</h2>
         <div class="history-items">
-          <div class="history-item" v-for="(item, index) in analysisHistory" :key="index" @click="showHistoryItem(item)">
-            <img :src="item.image" class="history-image" alt="History Image">
+          <div
+            class="history-item"
+            v-for="(item, index) in analysisHistory"
+            :key="index"
+            @click="showHistoryItem(item)"
+          >
+            <img :src="item.image" class="history-image" alt="History Image" />
             <div class="history-type">{{ item.result.type }}</div>
             <div class="history-date">{{ formatDate(item.timestamp) }}</div>
           </div>
@@ -91,17 +123,30 @@
           <span class="close-modal" @click="closeModal">&times;</span>
           <h2>Detail Analisis</h2>
           <div class="result-card">
-            <img :src="selectedHistoryItem.image" class="image-preview" style="max-height: 300px; margin-bottom: 20px;" alt="Detail Image">
+            <img
+              :src="selectedHistoryItem.image"
+              class="image-preview"
+              style="max-height: 300px; margin-bottom: 20px"
+              alt="Detail Image"
+            />
             <div class="waste-icon">
               <i :class="selectedHistoryItem.result.icon"></i>
             </div>
             <h3 class="waste-type">{{ selectedHistoryItem.result.type }}</h3>
-            <p class="waste-description">{{ selectedHistoryItem.result.description }}</p>
+            <p class="waste-description">
+              {{ selectedHistoryItem.result.description }}
+            </p>
 
             <div class="disposal-info">
               <h4 class="disposal-title">Cara Pembuangan yang Tepat:</h4>
               <ul class="disposal-steps">
-                <li v-for="(step, index) in selectedHistoryItem.result.disposalSteps" :key="index">{{ step }}</li>
+                <li
+                  v-for="(step, index) in selectedHistoryItem.result
+                    .disposalSteps"
+                  :key="index"
+                >
+                  {{ step }}
+                </li>
               </ul>
             </div>
           </div>
@@ -112,7 +157,7 @@
 </template>
 
 <script>
-import axios from 'axios';  // Tambahkan ini
+import axios from 'axios'; // Tambahkan ini
 
 export default {
   name: 'TabScan',
@@ -127,8 +172,8 @@ export default {
       isLoading: false,
       analysisHistory: [],
       isModalOpen: false,
-      selectedHistoryItem: null
-    }
+      selectedHistoryItem: null,
+    };
   },
   methods: {
     triggerFileInput() {
@@ -157,15 +202,17 @@ export default {
           video: {
             facingMode: this.currentFacingMode,
             width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
+            height: { ideal: 720 },
+          },
         };
 
-        this.videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+        this.videoStream = await navigator.mediaDevices.getUserMedia(
+          constraints
+        );
         this.$refs.videoElement.srcObject = this.videoStream;
       } catch (error) {
-        console.error("Error accessing camera:", error);
-        alert("Tidak dapat mengakses kamera. Pastikan Anda memberikan izin.");
+        console.error('Error accessing camera:', error);
+        alert('Tidak dapat mengakses kamera. Pastikan Anda memberikan izin.');
         this.closeCamera();
       }
     },
@@ -183,25 +230,32 @@ export default {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       // Konversi ke blob dan simpan
-      canvas.toBlob((blob) => {
-        this.uploadedFile = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+      canvas.toBlob(
+        (blob) => {
+          this.uploadedFile = new File([blob], 'camera-photo.jpg', {
+            type: 'image/jpeg',
+          });
 
-        // Buat preview
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.imagePreview = e.target.result;
-          this.closeCamera();
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/jpeg', 0.9);
+          // Buat preview
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.imagePreview = e.target.result;
+            this.closeCamera();
+          };
+          reader.readAsDataURL(blob);
+        },
+        'image/jpeg',
+        0.9
+      );
     },
 
     async switchCamera() {
-      this.currentFacingMode = this.currentFacingMode === 'user' ? 'environment' : 'user';
+      this.currentFacingMode =
+        this.currentFacingMode === 'user' ? 'environment' : 'user';
 
       // Stop stream sebelumnya
       if (this.videoStream) {
-        this.videoStream.getTracks().forEach(track => track.stop());
+        this.videoStream.getTracks().forEach((track) => track.stop());
       }
 
       // Mulai dengan mode baru
@@ -211,7 +265,7 @@ export default {
     closeCamera() {
       // Stop stream kamera
       if (this.videoStream) {
-        this.videoStream.getTracks().forEach(track => track.stop());
+        this.videoStream.getTracks().forEach((track) => track.stop());
         this.videoStream = null;
       }
 
@@ -228,9 +282,13 @@ export default {
         formData.append('image', this.uploadedFile);
 
         // Send to backend API
-        const response = await axios.post('http://localhost:8080/analyze-image', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        const response = await axios.post(
+          'http://localhost:8080/analyze-image',
+          formData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
+        );
 
         this.analysisResult = response.data;
 
@@ -238,9 +296,8 @@ export default {
         this.analysisHistory.unshift({
           image: this.imagePreview,
           result: { ...this.analysisResult },
-          timestamp: new Date()
+          timestamp: new Date(),
         });
-
       } catch (error) {
         console.error('Error analyzing image:', error);
         alert('Gagal menganalisis gambar. Silakan coba lagi.');
@@ -258,15 +315,15 @@ export default {
     closeModal() {
       this.isModalOpen = false;
       this.selectedHistoryItem = null;
-    }
+    },
   },
   beforeUnmount() {
     // Cleanup kamera
     if (this.videoStream) {
-      this.videoStream.getTracks().forEach(track => track.stop());
+      this.videoStream.getTracks().forEach((track) => track.stop());
     }
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -287,14 +344,14 @@ export default {
 .main-title {
   text-align: center;
   margin-bottom: 30px;
-  color: #2E7D32;
+  color: #2e7d32;
 }
 
 .upload-section {
   background-color: white;
   border-radius: 8px;
   padding: 30px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 30px;
 }
 
@@ -323,13 +380,13 @@ export default {
 }
 
 .upload-btn:hover {
-  border-color: #4CAF50;
+  border-color: #4caf50;
   background-color: #f0f0f0;
 }
 
 .upload-btn i {
   font-size: 48px;
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 15px;
 }
 
@@ -359,11 +416,11 @@ export default {
   max-width: 100%;
   max-height: 400px;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .analyze-btn {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 12px 25px;
@@ -388,14 +445,14 @@ export default {
   background-color: white;
   border-radius: 8px;
   padding: 30px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-bottom: 30px;
   display: none;
 }
 
 .results-title {
   margin-bottom: 20px;
-  color: #2E7D32;
+  color: #2e7d32;
   text-align: center;
 }
 
@@ -409,7 +466,7 @@ export default {
 .waste-type {
   font-size: 24px;
   font-weight: bold;
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 10px;
 }
 
@@ -450,8 +507,8 @@ export default {
 }
 
 .disposal-steps li:before {
-  content: "•";
-  color: #4CAF50;
+  content: '•';
+  color: #4caf50;
   font-size: 20px;
   position: absolute;
   left: 0;
@@ -463,12 +520,12 @@ export default {
   background-color: white;
   border-radius: 8px;
   padding: 30px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .history-title {
   margin-bottom: 20px;
-  color: #2E7D32;
+  color: #2e7d32;
 }
 
 .history-items {
@@ -486,7 +543,7 @@ export default {
 }
 
 .history-item:hover {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
 
@@ -500,7 +557,7 @@ export default {
 
 .history-type {
   font-weight: bold;
-  color: #4CAF50;
+  color: #4caf50;
   margin-bottom: 5px;
 }
 
@@ -508,7 +565,6 @@ export default {
   font-size: 12px;
   color: #888;
 }
-
 
 /* Camera Modal Styles */
 .camera-container {
@@ -552,7 +608,7 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.3);
+  background: rgba(255, 255, 255, 0.3);
   border: none;
   cursor: pointer;
   display: flex;
@@ -569,7 +625,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -610,7 +666,7 @@ export default {
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
-  border-top: 4px solid #4CAF50;
+  border-top: 4px solid #4caf50;
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
@@ -618,8 +674,12 @@ export default {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive Styles */

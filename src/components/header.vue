@@ -36,10 +36,12 @@
     <!-- Mobile Menu (Hidden on Desktop) -->
     <transition name="slide-down">
       <div v-if="isMobileMenuOpen" class="mobile-menu">
-        <router-link to="/" class="mobile-link" @click="toggleMobileMenu">Home</router-link>
-        <router-link to="/pricing" class="mobile-link" @click="toggleMobileMenu">Pricing</router-link>
-        <router-link to="/about" class="mobile-link" @click="toggleMobileMenu">About Us</router-link>
-        <router-link to="/contact" class="mobile-link" @click="toggleMobileMenu">Contact</router-link>
+        <router-link to="/" class="mobile-link" @click="toggleMobileMenu">Beranda</router-link>
+        <router-link to="/scan" class="mobile-link" @click="toggleMobileMenu">Scan Sampah</router-link>
+        <router-link to="/contact" class="mobile-link" @click="toggleMobileMenu">Edukasi</router-link>
+        <router-link to="/kuis" class="mobile-link" @click="toggleMobileMenu">Kuis</router-link>
+        <router-link to="/about" class="mobile-link" @click="toggleMobileMenu">Tentang Kami</router-link>
+
 
         <div class="mobile-auth">
           <router-link to="/login" class="btn mobile-sign-in" @click="toggleMobileMenu">
@@ -81,7 +83,7 @@ export default {
 <style scoped>
 .site-header {
   background-color: white;
-  padding: 2rem 2rem;
+  padding: 1.5rem;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -126,7 +128,7 @@ export default {
 }
 
 .nav-link:hover {
-  color: #1e40af;
+  color: #1F7D53;
 }
 
 .nav-link::after {
@@ -136,7 +138,7 @@ export default {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+  background: linear-gradient(90deg, #42835A 0%, #25A989 100%);
   transition: width 0.3s ease;
 }
 
@@ -145,7 +147,7 @@ export default {
 }
 
 .router-link-exact-active {
-  color: #1e40af;
+  color: #082E16;
   font-weight: 600;
 }
 
@@ -177,20 +179,20 @@ export default {
 }
 
 .sign-in:hover {
-  background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+  background: #1F7D53;
   color: #ffffff;
   transform: translateY(-1px);
 }
 
 .sign-up {
-  background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+  background: #1F7D53;
   color: white;
   border: none;
 }
 
 .sign-up:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(96, 246, 59, 0.2);
 }
 
 /* Mobile Menu Styles */

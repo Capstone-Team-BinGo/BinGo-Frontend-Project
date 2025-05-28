@@ -1,125 +1,137 @@
 <template>
-    <div class="home">
-      <!-- Hero Section -->
-      <section class="hero">
-        <div class="hero-content">
-          <div class="text-content">
-            <h1 class="title">B<span class="green-i">i</span>NGO !</h1>
-            <p>
-              Platform Edukasi Pengelolaan Sampah dan Belajar Memilah Sampah Dengan Cara Yang Seru.
-            </p>
-            <button class="read-more">LEARN MORE</button>
-          </div>
-          <div class="image-content">
-            <img src="@/assets/Recycle.jpeg" alt="Recycle Illustration" />
-          </div>
+  <div class="home">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="text-content">
+          <h1 class="title">B<span class="green-i">i</span>NGO !</h1>
+          <p>
+            Platform Edukasi Pengelolaan Sampah dan Belajar Memilah Sampah
+            Dengan Cara Yang Seru.
+          </p>
+          <button class="read-more">LEARN MORE</button>
         </div>
-      </section>
-
-      <section class="facts-section enhanced">
-  <div class="facts-container">
-    <div class="facts-text">
-      <h2 class="facts-title">Indonesia dan Tantangan Sampah, Apa yang Harus Kita Tahu?</h2>
-      <p>
-        Indonesia menghadapi tantangan serius dalam pengelolaan sampah, 
-        Penting bagi masyarakat untuk memahami dampaknya terhadap lingkungan 
-        dan berperan aktif dalam solusi, 
-        seperti pengurangan, pemilahan, dan daur ulang sampah.
-      </p>
-      <div class="facts-stats">
-        <div class="fact-item">
-          <strong>69,7 Juta</strong>
-          <span>Ton Sampah Pertahun</span>
-        </div>
-        <div class="fact-item">
-          <strong>60%</strong>
-          <span>Komposisi Sampah Organik</span>
-        </div>
-        <div class="fact-item">
-          <strong>15%</strong>
-          <span>Sampah Yang DIdaur ulang</span>
+        <div class="image-content">
+          <img src="@/assets/Recycle.jpeg" alt="Recycle Illustration" />
         </div>
       </div>
-      <a href="#" class="facts-link">Semua Tentang Kami di sini  <i class="fas fa-arrow-right" style="margin-left: 6px;"></i></a>
-    </div>
-    <div class="facts-image">
-      <img src="@/assets/sampah.png" alt="Ilustrasi daur ulang" />
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class="card-container">
-  <h2 class="section-title">Jenis-Jenis Sampah</h2>
-  <div class="card-wrapper">
-    <div class="card organik">
-      <div class="card-content">
-        <div class="icon">
-          <i class="fas fa-leaf"></i>
-        </div>
-        <h3>Organik</h3>
-        <div class="card-overlay">
-          <div class="overlay-content">
-            <p>Sampah organik adalah jenis sampah yang berasal dari 
-              bahan-bahan alami atau makhluk hidup dan dapat terurai secara alami oleh mikroorganisme.</p>
-            <RouterLink to="/organic" class="overlay-button">
-              <span>Selengkapnya</span>
-              <i class="fas fa-arrow-right"></i>
-            </RouterLink>
+    <section class="facts-section enhanced">
+      <div class="facts-container">
+        <div class="facts-text">
+          <h2 class="facts-title">
+            Indonesia dan Tantangan Sampah, Apa yang Harus Kita Tahu?
+          </h2>
+          <p>
+            Indonesia menghadapi tantangan serius dalam pengelolaan sampah,
+            Penting bagi masyarakat untuk memahami dampaknya terhadap lingkungan
+            dan berperan aktif dalam solusi, seperti pengurangan, pemilahan, dan
+            daur ulang sampah.
+          </p>
+          <div class="facts-stats">
+            <div class="fact-item">
+              <strong>69,7 Juta</strong>
+              <span>Ton Sampah Pertahun</span>
+            </div>
+            <div class="fact-item">
+              <strong>60%</strong>
+              <span>Komposisi Sampah Organik</span>
+            </div>
+            <div class="fact-item">
+              <strong>15%</strong>
+              <span>Sampah Yang DIdaur ulang</span>
+            </div>
           </div>
+          <a href="#" class="facts-link"
+            >Semua Tentang Kami di sini
+            <i class="fas fa-arrow-right" style="margin-left: 6px"></i
+          ></a>
         </div>
       </div>
-    </div>
-    <div class="card anorganik">
-      <div class="card-content">
-        <div class="icon">
-          <i class="fas fa-recycle"></i>
+    </section>
+
+    <section class="card-container">
+      <h2 class="section-title">Jenis-Jenis Sampah</h2>
+      <div class="card-wrapper">
+        <div class="card organik">
+          <div class="card-content">
+            <div class="icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h3>Organik</h3>
+            <div class="card-overlay">
+              <div class="overlay-content">
+                <p>
+                  Sampah organik adalah jenis sampah yang berasal dari
+                  bahan-bahan alami atau makhluk hidup dan dapat terurai secara
+                  alami oleh mikroorganisme.
+                </p>
+                <RouterLink to="/organic" class="overlay-button">
+                  <span>Selengkapnya</span>
+                  <i class="fas fa-arrow-right"></i>
+                </RouterLink>
+              </div>
+            </div>
+          </div>
         </div>
-        <h3>Anorganik</h3>
-        <div class="card-overlay">
-          <div class="overlay-content">
-            <p>Sampah anorganik adalah jenis sampah yang tidak berasal 
-                dari makhluk hidup dan sulit atau tidak bisa terurai secara alami oleh mikroorganisme. </p>
+        <div class="card anorganik">
+          <div class="card-content">
+            <div class="icon">
+              <i class="fas fa-recycle"></i>
+            </div>
+            <h3>Anorganik</h3>
+            <div class="card-overlay">
+              <div class="overlay-content">
+                <p>
+                  Sampah anorganik adalah jenis sampah yang tidak berasal dari
+                  makhluk hidup dan sulit atau tidak bisa terurai secara alami
+                  oleh mikroorganisme.
+                </p>
                 <RouterLink to="/anorganic" class="overlay-button">
-              <span>Selengkapnya</span>
-              <i class="fas fa-arrow-right"></i>
-            </RouterLink>
+                  <span>Selengkapnya</span>
+                  <i class="fas fa-arrow-right"></i>
+                </RouterLink>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card b3">
+          <div class="card-content">
+            <div class="icon">
+              <i class="fas fa-biohazard"></i>
+            </div>
+            <h3>B3</h3>
+            <div class="card-overlay">
+              <div class="overlay-content">
+                <p>
+                  Sampah B3 adalah limbah yang mengandung zat kimia berbahaya
+                  dan beracun yang dapat merusak kesehatan dan lingkungan jika
+                  tidak ditangani dengan benar.
+                </p>
+                <RouterLink to="/b3" class="overlay-button">
+                  <span>Selengkapnya</span>
+                  <i class="fas fa-arrow-right"></i>
+                </RouterLink>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="card b3">
-      <div class="card-content">
-        <div class="icon">
-          <i class="fas fa-biohazard"></i>
-        </div>
-        <h3>B3</h3>
-        <div class="card-overlay">
-          <div class="overlay-content">
-            <p>Sampah B3 adalah limbah yang mengandung zat kimia berbahaya dan beracun yang 
-              dapat merusak kesehatan dan lingkungan jika tidak ditangani dengan benar.</p>
-              <RouterLink to="/b3" class="overlay-button">
-              <span>Selengkapnya</span>
-              <i class="fas fa-arrow-right"></i>
-            </RouterLink>
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   </div>
-</section>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "HomeContent"
-  };
-  </script>
-  
-  <style scoped>
-  /* Hero Section */
+</template>
+
+<script>
+export default {
+  name: 'HomeContent',
+};
+</script>
+
+<style scoped>
+/* Hero Section */
 .hero {
-  background-color: #082e16;
+  background-color: #255f38;
   padding: 67px 20px;
 }
 
@@ -148,9 +160,8 @@
 }
 
 .green-i {
-  color: #DDEB9D;
+  color: #ddeb9d;
 }
-
 
 .text-content {
   max-width: 500px;
@@ -189,7 +200,8 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.95rem;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .read-more:hover {
@@ -199,7 +211,7 @@
 }
 
 .image-content img {
-  max-width: 550px;
+  width: 100%;
   height: auto;
   border-radius: 16px;
 }
@@ -216,6 +228,7 @@
   max-width: 1200px;
   margin: 0 auto;
   align-items: center;
+  text-align: center;
 }
 
 @media (min-width: 768px) {
@@ -226,6 +239,7 @@
 
 .facts-text {
   flex: 1;
+  margin: 0 20%;
 }
 
 .facts-text .facts-title {
@@ -249,14 +263,26 @@
   margin-bottom: 20px;
 }
 
+@media (max-width: 768px) {
+  .facts-text {
+    margin: 0;
+  }
+  .facts-stats {
+    margin: 0 25% 0;
+  }
+}
+
 .fact-item {
-  background-color: #16a34a;
+  background-color: #1f7d53;
   color: #ffffff;
   padding: 16px 20px;
   border-radius: 12px;
   flex: 1;
   min-width: 140px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .fact-item strong {
@@ -272,7 +298,7 @@
 .facts-link {
   display: inline-block;
   margin-top: 12px;
-  color: #16a34a;
+  color: #1f7d53;
   font-weight: bold;
   text-decoration: none;
 }
@@ -292,7 +318,6 @@
   border-radius: 12px;
 }
 
-
 /* Category Cards Section */
 /* Modern Card Styles */
 .card-container {
@@ -305,7 +330,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 3rem;
-  color: #2d3748;
+  color: #082e16;
   text-align: center;
   position: relative;
 }
@@ -315,7 +340,7 @@
   display: block;
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, #42835a 0%, #25a989 100%);
   margin: 1rem auto 0;
   border-radius: 2px;
 }
@@ -391,8 +416,11 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(249,250,251,0.98) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(249, 250, 251, 0.98) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -498,10 +526,9 @@
   .card-wrapper {
     grid-template-columns: 1fr;
   }
-  
+
   .card {
     height: 260px;
   }
 }
-  </style>
-  
+</style>

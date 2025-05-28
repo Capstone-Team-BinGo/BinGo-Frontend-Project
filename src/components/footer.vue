@@ -86,7 +86,7 @@ export default {
 <style scoped>
 /* Base Styles */
 .footer {
-  background-color: #0f172a;
+  background-color: #082E16;
   color: #e2e8f0;
   position: relative;
   padding-top: 80px;
@@ -122,7 +122,7 @@ export default {
   font-size: 24px;
   font-weight: 700;
   color: #ffffff;
-  background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, #42835A 0%, #25A989 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -179,7 +179,7 @@ export default {
   bottom: 0;
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, #42835A 0%, #25A989 100%);;
 }
 
 .footer-links {
@@ -295,11 +295,11 @@ export default {
   .footer-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .footer-bottom {
     flex-direction: row;
   }
-  
+
   .copyright {
     margin-bottom: 0;
   }
@@ -309,12 +309,12 @@ export default {
   .footer {
     padding-top: 60px;
   }
-  
+
   .footer-wave {
     top: -40px;
     height: 40px;
   }
-  
+
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 30px;
