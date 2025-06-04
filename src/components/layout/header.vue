@@ -2,7 +2,7 @@
   <header class="site-header">
     <div class="container">
       <div class="logo">
-        <img src="@/assets/images/bingo1.png" alt="Bingo Logo" class="logo-image" style="height: 40px;" />
+        <span class="logo-text">Bingo</span>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -18,21 +18,36 @@
       <nav class="nav-links">
         <router-link to="/" class="nav-link">Beranda</router-link>
         <router-link to="/scan" class="nav-link">Scan Sampah</router-link>
-        <router-link to="/edukasi" class="nav-link">Edukasi</router-link>
-        <router-link to="/kuis" class="nav-link">Kuis</router-link>
+        <!--<router-link to="/manage" class="nav-link">Kelola Artikel</router-link>
+        <router-link to="/new" class="nav-link">Buat Artikel</router-link>-->
+        <router-link v-if="authStore.isAuthenticated" to="/edukasi" class="nav-link">Edukasi</router-link>
+        <router-link v-if="authStore.isAuthenticated" to="/kuis" class="nav-link">Kuis</router-link>
         <router-link to="/about" class="nav-link">Tentang Kami</router-link>
-        <router-link to="/manage" class="nav-link">Kelola Artikel</router-link>
-        <router-link to="/new" class="nav-link">Buat Artikel</router-link>
       </nav>
 
-      <div class="auth-buttons">
-        <router-link to="/login" class="btn sign-in">
-          <i class="fas fa-sign-in-alt"></i> Sign In
-        </router-link>
-        <router-link to="/register" class="btn sign-up">
-          <i class="fas fa-user-plus"></i> Sign Up
-        </router-link>
-      </div>
+      <div class="auth-buttons" v-if="!authStore.isAuthenticated">
+        <button class="btn sign-in" @click="$emit('open-login')">
+      <i class="fas fa-user"></i> Gabung
+    </button>
+  <!--
+      <router-link to="/register" class="btn sign-up">
+       <i class="fas fa-user-plus"></i> Daftar
+  </router-link>
+-->
+</div>
+
+<div class="profile-wrapper" v-if="authStore.isAuthenticated">
+  <div class="profile-display">
+    <i class="fas fa-user-circle fa-lg"></i>
+    <span class="username">{{ authStore.user?.displayName || authStore.user?.email }}</span>
+  </div>
+  <div class="logout-dropdown">
+    <button @click="logout" class="logout-button">Keluar</button>
+  </div>
+</div>
+
+
+
     </div>
 
     <!-- Mobile Menu (Hidden on Desktop) -->
@@ -40,30 +55,58 @@
       <div v-if="isMobileMenuOpen" class="mobile-menu">
         <router-link to="/" class="mobile-link" @click="toggleMobileMenu">Beranda</router-link>
         <router-link to="/scan" class="mobile-link" @click="toggleMobileMenu">Scan Sampah</router-link>
-        <router-link to="/edukasi" class="mobile-link" @click="toggleMobileMenu">Edukasi</router-link>
-        <router-link to="/kuis" class="mobile-link" @click="toggleMobileMenu">Kuis</router-link>
+        <router-link v-if="authStore.isAuthenticated" to="/edukasi" class="mobile-link" @click="toggleMobileMenu">Edukasi</router-link>
+        <router-link v-if="authStore.isAuthenticated" to="/kuis" class="mobile-link" @click="toggleMobileMenu">Kuis</router-link>
         <router-link to="/about" class="mobile-link" @click="toggleMobileMenu">Tentang Kami</router-link>
-
-
-        <div class="mobile-auth">
-          <router-link to="/login" class="btn mobile-sign-in" @click="toggleMobileMenu">
-            <i class="fas fa-sign-in-alt"></i> Sign In
-          </router-link>
-          <router-link to="/register" class="btn mobile-sign-up" @click="toggleMobileMenu">
-            <i class="fas fa-user-plus"></i> Sign Up
-          </router-link>
-        </div>
+        <div class="mobile-auth" v-if="!authStore.isAuthenticated">
+          <button class="btn mobile-sign-in" @click="$emit('open-login')">
+      <i class="fas fa-user"></i> Gabung
+    </button>
+  <!--
+    <router-link to="/register" class="btn mobile-sign-up" @click="toggleMobileMenu">
+      <i class="fas fa-user-plus"></i> Daftar
+    </router-link>
+  -->
+</div>
+<div class="mobile-auth" v-if="authStore.isAuthenticated">
+  <div class="profile-mobile">
+    <i class="fas fa-user-circle fa-lg"></i>
+    <span class="username">{{ authStore.user?.displayName || authStore.user?.email }}</span>
+  </div>
+  <button class="mobile-logout-btn" @click="logout">
+    <i class="fas fa-sign-out-alt"></i> Keluar
+  </button>
+</div>
       </div>
     </transition>
   </header>
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
+
 export default {
   name: 'HeaderComponent',
+  setup() {
+    const authStore = useAuthStore();
+
+    async function loginGoogle() {
+      try {
+        await authStore.loginWithGoogle();
+      } catch (error) {
+        alert('Gagal login dengan Google');
+      }
+    }
+
+    async function logout() {
+      await authStore.logout();
+    }
+
+    return { authStore, loginGoogle, logout };
+  },
   data() {
     return {
-      isMobileMenuOpen: false
+      isMobileMenuOpen: false,
     };
   },
   methods: {
@@ -72,20 +115,21 @@ export default {
     },
     closeMobileMenu() {
       this.isMobileMenuOpen = false;
-    }
+    },
   },
   watch: {
     $route() {
       this.closeMobileMenu();
-    }
-  }
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .site-header {
   background-color: white;
-  padding: 1.5rem;
+  padding: 2rem 2rem;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -105,7 +149,7 @@ export default {
 .logo-text {
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+  background: linear-gradient(90deg, #10B981, #065F46);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -130,7 +174,7 @@ export default {
 }
 
 .nav-link:hover {
-  color: #1F7D53;
+  color: #42835A;
 }
 
 .nav-link::after {
@@ -140,7 +184,7 @@ export default {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #42835A 0%, #25A989 100%);
+  background: linear-gradient(90deg, #10B981, #065F46);
   transition: width 0.3s ease;
 }
 
@@ -149,7 +193,7 @@ export default {
 }
 
 .router-link-exact-active {
-  color: #082E16;
+  color: #42835A;
   font-weight: 600;
 }
 
@@ -181,20 +225,21 @@ export default {
 }
 
 .sign-in:hover {
-  background: #1F7D53;
+  background: #42835A;
   color: #ffffff;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
 .sign-up {
-  background: #1F7D53;
+  background: #42835A;
   color: white;
   border: none;
 }
 
 .sign-up:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(96, 246, 59, 0.2);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
 /* Mobile Menu Styles */
@@ -205,6 +250,7 @@ export default {
   cursor: pointer;
   padding: 0.5rem;
   z-index: 1001;
+  margin-left: auto;
 }
 
 .hamburger {
@@ -259,17 +305,92 @@ export default {
 }
 
 .mobile-link:hover {
-  color: #1e40af;
+  color: #42835A;
 }
 
 .mobile-auth {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
 }
 
+.profile-mobile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 70%;
+}
+
+.profile-mobile .fa-user-circle {
+  color: #5b6abf;
+  font-size: 1.8rem;
+  min-width: 32px;
+}
+
+.profile-mobile .username {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #dc3545;
+  border: 1px solid #f1f1f1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-logout-btn:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.mobile-logout-btn .fa-sign-out-alt {
+  font-size: 0.9rem;
+}
+
+/* Efek aktif saat tombol ditekan */
+.mobile-logout-btn:active {
+  transform: scale(0.96);
+  background-color: #c82333;
+}
+
+/* Responsif untuk layar sangat kecil */
+@media (max-width: 360px) {
+  .profile-mobile .username {
+    max-width: 120px;
+  }
+
+  .mobile-logout-btn {
+    padding: 8px;
+  }
+
+  .mobile-logout-btn span {
+    display: none;
+  }
+
+  .mobile-logout-btn .fa-sign-out-alt {
+    font-size: 1rem;
+    margin-right: 0;
+  }
+}
 .mobile-sign-in,
 .mobile-sign-up {
   flex: 1;
@@ -289,6 +410,108 @@ export default {
   transform: translateY(-20px);
 }
 
+.profile-wrapper {
+  position: relative;
+  display: inline-block;
+  font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
+}
+
+.profile-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  background-color: #f8f9fa;
+  color: #212529;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.profile-display:hover {
+  background-color: #e9ecef;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.profile-display .fa-user-circle {
+  color: #4e73df;
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.profile-display .username {
+  font-weight: 500;
+  font-size: 0.9rem;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dropdown logout */
+.logout-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  min-width: 120px;
+  padding-top: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+.profile-wrapper:hover .logout-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.logout-button {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: #fff;
+  color: #dc3545;
+  border: 1px solid #f1f1f1;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.logout-button:hover {
+  background-color: #dc3545;
+  color: white;
+  box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3);
+}
+
+.logout-button::before {
+  content: '\f2f5';
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 0.8rem;
+}
+
+/* Animasi saat hover */
+.profile-wrapper:hover .profile-display .fa-user-circle {
+  transform: scale(1.1);
+}
+
+/* Efek klik */
+.profile-display:active {
+  transform: scale(0.98);
+}
+
 /* Responsive Behavior */
 @media (max-width: 768px) {
   .site-header {
@@ -296,7 +519,7 @@ export default {
   }
 
   .nav-links,
-  .auth-buttons {
+  .auth-buttons, .profile-display, .logout-dropdown {
     display: none;
   }
 

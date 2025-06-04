@@ -1,79 +1,91 @@
 <template>
   <div class="organic-waste-gallery">
     <h2 class="gallery-title">Jenis Sampah Anorganik</h2>
+    <p class="gallery-subtitle">Pelajari berbagai jenis sampah Anorganik yang tidak bisa didaur ulang</p>
+    
     <div class="gallery-grid">
-      <!-- Card 1 -->
-      <div
-        class="waste-card"
-        v-for="(item, index) in organicItems"
-        :key="index"
-      >
+      <div class="waste-card" v-for="(item, index) in organicItems" :key="index">
         <div class="card-image">
-          <img :src="item.image" :alt="item.name" />
+          <img :src="item.image" :alt="item.name">
           <div class="image-overlay"></div>
+          <span class="card-badge">Anorganik</span>
         </div>
         <div class="card-content">
           <h3>{{ item.name }}</h3>
           <p>{{ item.description }}</p>
+          <div class="card-footer">
+          </div>
         </div>
       </div>
     </div>
+    
     <RouterLink to="/" class="back-button">
-      <i class="fas fa-arrow-left"></i> Kembali
+      <i class="fas fa-arrow-left"></i> Kembali ke Beranda
     </RouterLink>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'AnorganicList',
-  data() {
-    return {
-      organicItems: [
-        {
-          name: 'Plastik',
-          description: 'Kantong plastik, botol, dan sedotan.',
-          image: require('@/assets/images/anorganic/plastik.jpeg'),
-        },
-        {
-          name: 'Kaca',
-          description: 'Botol kaca, gelas kaca, toples kaca, pecahan kaca.',
-          image: require('@/assets/images/anorganic/kaca.jpg'),
-        },
-        {
-          name: 'Logam',
-          description: 'Kaleng, besi, aluminium, tutup botol.',
-          image: require('@/assets/images/anorganic/logam.jpeg'),
-        },
-        {
-          name: 'Styrofoam',
-          description: 'Wadah makanan, gelas, mangkuk mie instan, cool box.',
-          image: require('@/assets/images/anorganic/styrofoam.jpg'),
-        },
-        {
-          name: 'Karet Sintetis',
-          description: 'Sarung tangan, sepatu, ban, selang air.',
-          image: require('@/assets/images/anorganic/karet.jpg'),
-        },
-      ],
-    };
-  },
-};
-</script>
-
-<style scoped>
+  
+  <script>
+  export default {
+    name: 'AnorganicList',
+    data() {
+      return {
+        organicItems: [
+          {
+            name: 'Plastik',
+            description: 'Kantong plastik, botol, dan sedotan.',
+            image: require('@/assets/anorganic/plastik.jpeg')
+          },
+          {
+            name: 'Kaca',
+            description: 'Botol kaca, gelas kaca, toples kaca, pecahan kaca.',
+            image: require('@/assets/anorganic/kaca.jpg')
+          },
+          {
+            name: 'Logam',
+            description: 'Kaleng, besi, aluminium, tutup botol.',
+            image: require('@/assets/anorganic/logam.jpeg')
+          },
+          {
+            name: 'Styrofoam',
+            description: 'Wadah makanan, gelas, mangkuk mie instan, cool box.',
+            image: require('@/assets/anorganic/styrofoam.jpg')
+          },
+          {
+            name: 'Karet Sintetis',
+            description: 'Sarung tangan, sepatu, ban, selang air.',
+            image: require('@/assets/anorganic/karet.jpg')
+          }
+        ]
+      }
+    }
+  }
+  </script>
+  
+  <style scoped>
 .organic-waste-gallery {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 2rem;
 }
 
 .gallery-title {
-  color: #10b981;
+  color: #082E16;
   text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
   position: relative;
+}
+
+.gallery-subtitle {
+  color: #4B5563;
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .gallery-title::after {
@@ -81,34 +93,37 @@ export default {
   display: block;
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, #10b981, #3b82f6);
-  margin: 0.5rem auto 0;
+  background: linear-gradient(90deg, #10B981, #065F46);
+  margin: 1rem auto 0;
   border-radius: 2px;
 }
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+  margin-bottom: 4rem;
 }
 
 .waste-card {
   background: white;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 10px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .waste-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
 }
 
 .card-image {
   position: relative;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
 }
 
@@ -116,11 +131,11 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s;
+  transition: transform 0.5s ease;
 }
 
 .waste-card:hover .card-image img {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .image-overlay {
@@ -129,30 +144,73 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent 50%);
+  background: linear-gradient(to top, rgba(8, 46, 22, 0.7), transparent 60%);
+}
+
+.card-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: #065F46;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .card-content {
   padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-content h3 {
-  color: #1e293b;
-  margin-bottom: 0.5rem;
-  font-size: 1.3rem;
+  color: #082E16;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .card-content p {
-  color: #64748b;
+  color: #4B5563;
   font-size: 0.95rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.card-footer {
+  margin-top: auto;
+}
+
+.detail-button {
+  background-color: #065F46;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.detail-button:hover {
+  background-color: #064E3B;
+  transform: translateY(-2px);
 }
 
 .back-button {
-  display: block;
+  display: inline-flex;
+  align-items: center;
   margin: 2rem auto 0;
   padding: 0.8rem 2rem;
-  background-color: #10b981;
+  background-color: #065F46;
   color: white;
   border: none;
   border-radius: 50px;
@@ -160,14 +218,13 @@ export default {
   cursor: pointer;
   transition: all 0.3s;
   text-decoration: none;
-  width: 6rem;
-  margin-left: 3rem;
+  box-shadow: 0 4px 6px rgba(6, 95, 70, 0.1);
 }
 
 .back-button:hover {
-  background-color: #0d9c6e;
+  background-color: #064E3B;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 6px 8px rgba(6, 95, 70, 0.15);
 }
 
 .back-button i {
@@ -175,16 +232,26 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .organic-waste-gallery {
+    padding: 2rem 1.5rem;
+  }
+  
+  .gallery-title {
+    font-size: 2rem;
+  }
+  
+  .gallery-subtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
   .gallery-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
-
-  .gallery-title {
-    font-size: 1.6rem;
-  }
-
+  
   .card-image {
-    height: 180px;
+    height: 200px;
   }
 }
 </style>

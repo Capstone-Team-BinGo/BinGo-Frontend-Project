@@ -1,7 +1,9 @@
 <template>
-  <section class="articles-list">
-    <div v-if="articles.length === 0" class="no-articles">
-      <p>Tidak ada artikel yang ditemukan untuk kategori ini.</p>
+  <section class="article-grid">
+    <div v-if="articles.length === 0" class="empty-state">
+      <i class="fas fa-newspaper"></i>
+      <h3>No articles found</h3>
+      <p>Try changing your filter or check back later</p>
     </div>
     <ArticleCard
       v-for="article in articles"
@@ -27,21 +29,40 @@ export default {
 </script>
 
 <style scoped>
-.articles-list {
+.article-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
 }
 
-.no-articles {
+.empty-state {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 40px;
+  padding: 4rem 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  color: #2e7d32;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
   color: #666;
+  font-size: 1rem;
 }
 
 @media (max-width: 768px) {
-  .articles-list {
+  .article-grid {
     grid-template-columns: 1fr;
   }
 }

@@ -22,10 +22,11 @@
         <div class="links-column">
           <h3 class="footer-title">Navigasi</h3>
           <ul class="footer-links">
-            <li><a href="#" @click.prevent="showHome"><i class="fas fa-chevron-right"></i> Beranda</a></li>
-            <li><a href="#" @click.prevent="showHowToPlay"><i class="fas fa-chevron-right"></i> Cara Memilah</a></li>
-            <li><a href="#" @click.prevent="showAbout"><i class="fas fa-chevron-right"></i> Tentang Kami</a></li>
-            <li><a href="#" @click.prevent="showAbout"><i class="fas fa-chevron-right"></i> Edukasi</a></li>
+            <li><router-link to="/"><i class="fas fa-chevron-right"></i>Beranda</router-link></li>
+            <li><router-link to="/about"><i class="fas fa-chevron-right"></i>Tentang Kami</router-link></li>
+            <li><router-link to="/scan"><i class="fas fa-chevron-right"></i>Scan Sampah</router-link></li>
+            <li><router-link  v-if="authStore.isAuthenticated" to="/edukasi"><i class="fas fa-chevron-right"></i>Edukasi</router-link></li>
+            <li><router-link  v-if="authStore.isAuthenticated" to="/kuiz"><i class="fas fa-chevron-right"></i>Kuiz</router-link></li>
           </ul>
         </div>
 
@@ -67,8 +68,26 @@
 </template>
 
 <script>
+import { useAuthStore } from '@/stores/auth';
 export default {
   name: 'FooterComponent',
+  setup() {
+    const authStore = useAuthStore();
+
+    async function loginGoogle() {
+      try {
+        await authStore.loginWithGoogle();
+      } catch (error) {
+        alert('Gagal login dengan Google');
+      }
+    }
+
+    async function logout() {
+      await authStore.logout();
+    }
+
+    return { authStore, loginGoogle, logout };
+  },
   methods: {
     showHome() {
       this.$emit('navigate', 'home');
@@ -86,7 +105,7 @@ export default {
 <style scoped>
 /* Base Styles */
 .footer {
-  background-color: #082E16;
+  background-color: #010302;
   color: #e2e8f0;
   position: relative;
   padding-top: 80px;
@@ -122,7 +141,7 @@ export default {
   font-size: 24px;
   font-weight: 700;
   color: #ffffff;
-  background: linear-gradient(90deg, #42835A 0%, #25A989 100%);
+  background: linear-gradient(90deg, #10B981, #065F46);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -152,7 +171,7 @@ export default {
 }
 
 .social-links a:hover {
-  background: #3b82f6;
+  background: #42835A;
   color: white;
   transform: translateY(-3px);
 }
@@ -179,7 +198,7 @@ export default {
   bottom: 0;
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, #42835A 0%, #25A989 100%);;
+  background: linear-gradient(90deg, #10B981, #065F46);
 }
 
 .footer-links {
@@ -202,7 +221,7 @@ export default {
 }
 
 .footer-links li a:hover {
-  color: #3b82f6;
+  color: #42835A;
   transform: translateX(5px);
 }
 
@@ -283,7 +302,7 @@ export default {
 }
 
 .legal-links a:hover {
-  color: #3b82f6;
+  color: #42835A;
 }
 
 .legal-links span {
@@ -295,11 +314,11 @@ export default {
   .footer-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-
+  
   .footer-bottom {
     flex-direction: row;
   }
-
+  
   .copyright {
     margin-bottom: 0;
   }
@@ -309,12 +328,12 @@ export default {
   .footer {
     padding-top: 60px;
   }
-
+  
   .footer-wave {
     top: -40px;
     height: 40px;
   }
-
+  
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 30px;

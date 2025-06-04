@@ -1,33 +1,22 @@
 <template>
-  <section class="filter-section">
-    <h2 class="filter-title">Filter Artikel</h2>
-    <div class="filter-buttons">
-      <button
-        @click="$emit('filter-change', 'all')"
-        :class="{ active: activeFilter === 'all' }"
-        class="filter-btn">
-        Semua Artikel
-      </button>
-      <button
-        @click="$emit('filter-change', 'organik')"
-        :class="{ active: activeFilter === 'organik' }"
-        class="filter-btn">
-        Organik
-      </button>
-      <button
-        @click="$emit('filter-change', 'anorganik')"
-        :class="{ active: activeFilter === 'anorganik' }"
-        class="filter-btn">
-        Anorganik
-      </button>
-      <button
-        @click="$emit('filter-change', 'b3')"
-        :class="{ active: activeFilter === 'b3' }"
-        class="filter-btn">
-        B3
-      </button>
+  <div class="filter-container">
+    <div class="filter-header">
+      <h2 class="filter-title">
+        <i class="fas fa-filter"></i> Filter Articles
+      </h2>
+      <div class="filter-tabs">
+        <button
+          v-for="filter in filters"
+          :key="filter.value"
+          @click="$emit('filter-change', filter.value)"
+          :class="{ active: activeFilter === filter.value }"
+          class="filter-tab">
+          <i :class="filter.icon"></i>
+          {{ filter.label }}
+        </button>
+      </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -39,49 +28,87 @@ export default {
       default: 'all',
       required: true
     }
+  },
+  data() {
+    return {
+      filters: [
+        { value: 'all', label: 'Semua Artikel', icon: 'fas fa-layer-group' },
+        { value: 'organik', label: 'Organik', icon: 'fas fa-leaf' },
+        { value: 'anorganik', label: 'Anorganik', icon: 'fas fa-recycle' },
+        { value: 'b3', label: 'B3', icon: 'fas fa-biohazard' }
+      ]
+    };
   }
 };
 </script>
 
 <style scoped>
-.filter-section {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+.filter-container {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.filter-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .filter-title {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
+  font-size: 1.4rem;
   color: #2e7d32;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
 }
 
-.filter-buttons {
+.filter-title i {
+  font-size: 1.2rem;
+}
+
+.filter-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.75rem;
 }
 
-.filter-btn {
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  background-color: white;
-  border-radius: 20px;
+.filter-tab {
+  padding: 0.6rem 1.2rem;
+  border-radius: 30px;
+  background: #f5f5f5;
+  border: none;
   cursor: pointer;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+  background: #e0e0e0;
+}
+
+.filter-tab.active {
+  background: #2e7d32;
+  color: white;
+}
+
+.filter-tab i {
   font-size: 0.9rem;
 }
 
-.filter-btn:hover {
-  background-color: #f0f0f0;
-}
+@media (max-width: 768px) {
+  .filter-tabs {
+    gap: 0.5rem;
+  }
 
-.filter-btn.active {
-  background-color: #2e7d32;
-  color: white;
-  border-color: #2e7d32;
+  .filter-tab {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
 }
 </style>

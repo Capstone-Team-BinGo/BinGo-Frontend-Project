@@ -1,10 +1,14 @@
 <template>
-  <div class="waste-education">
+  <div class="education-app">
     <WasteEducationHeader />
-      <div class="container">
-        <ArticleFilter :active-filter="activeFilter" @filter-change="updateFilter" />
-        <ArticleList :articles="filteredArticles" />
-      </div>
+    <div class="app-container">
+      <ArticleFilter
+        :active-filter="activeFilter"
+        @filter-change="updateFilter"
+        class="filter-container"
+      />
+      <ArticleList :articles="filteredArticles" />
+    </div>
   </div>
 </template>
 
@@ -101,23 +105,29 @@ export default {
     updateFilter(category) {
       this.activeFilter = category;
     },
-    formatDate(dateString) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      return new Date(dateString).toLocaleDateString('id-ID', options);
-    },
   },
 };
 </script>
 
 <style scoped>
-.waste-education {
-  background-color: #f5f5f5;
+.education-app {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
   min-height: 100vh;
 }
 
-.container {
-  max-width: 1200px;
+.app-container {
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
+}
+
+.filter-container {
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1.5rem;
+  }
 }
 </style>
