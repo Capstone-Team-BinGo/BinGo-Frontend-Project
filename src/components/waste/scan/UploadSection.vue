@@ -113,7 +113,7 @@ export default {
 
       try {
         const response = await axios.post(
-          'http://192.168.43.30:5000/predict',
+          'http://localhost:5000/predict',
           formData,
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
