@@ -59,7 +59,7 @@
       <div class="bingo-content">
         <div class="bingo-text">BINGO!</div>
         <img
-          src="@/assets/transisi.png"
+          src="@/assets/images/transisi.png"
           class="bingo-image"
           alt="Happy child"
         />
@@ -120,7 +120,7 @@ export default {
     return {
       questions: [
         {
-          image: require('@/assets/organic/tulang.jpg'),
+          image: require('@/assets/images/organic/tulang.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'Organik',
@@ -128,7 +128,7 @@ export default {
             'Tulang termasuk sampah organik karena bisa terurai secara alami.',
         },
         {
-          image: require('@/assets/anorganic/kaca.jpg'),
+          image: require('@/assets/images/anorganic/kaca.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'Anorganik',
@@ -136,7 +136,7 @@ export default {
             'Botol plastik termasuk sampah anorganik karena tidak bisa terurai secara alami dan bisa didaur ulang.',
         },
         {
-          image: require('@/assets/b3/baterai.jpg'),
+          image: require('@/assets/images/b3/baterai.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'B3',
@@ -144,7 +144,7 @@ export default {
             'Baterai termasuk sampah B3 (Bahan Berbahaya dan Beracun) karena mengandung bahan kimia berbahaya.',
         },
         {
-          image: require('@/assets/organic/daun.jpeg'),
+          image: require('@/assets/images/organic/daun.jpeg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'Organik',
@@ -152,7 +152,7 @@ export default {
             'Daun kering termasuk sampah organik karena berasal dari tumbuhan dan bisa terurai.',
         },
         {
-          image: require('@/assets/anorganic/karet.jpg'),
+          image: require('@/assets/images/anorganic/karet.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'Anorganik',
@@ -160,7 +160,7 @@ export default {
             'Kaleng minuman termasuk sampah anorganik karena terbuat dari logam dan bisa didaur ulang.',
         },
         {
-          image: require('@/assets/b3/oli.jpg'),
+          image: require('@/assets/images/b3/oli.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'B3',
@@ -168,7 +168,7 @@ export default {
             'Oli termasuk sampah B3 karena mengandung merkuri yang berbahaya.',
         },
         {
-          image: require('@/assets/organic/sisamakanan.jpeg'),
+          image: require('@/assets/images/organic/sisamakanan.jpeg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'Organik',
@@ -176,7 +176,7 @@ export default {
             'Sisa makanan termasuk sampah organik karena berasal dari bahan alami yang bisa terurai.',
         },
         {
-          image: require('@/assets/anorganic/styrofoam.jpg'),
+          image: require('@/assets/images/anorganic/styrofoam.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'Anorganik',
@@ -184,7 +184,7 @@ export default {
             'Styrofoam termasuk sampah anorganik karena meskipun berasal dari kayu, proses pembuatannya sudah mengubahnya menjadi bahan yang berbeda.',
         },
         {
-          image: require('@/assets/b3/pembersih.jpg'),
+          image: require('@/assets/images/b3/pembersih.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'B3',
@@ -192,7 +192,7 @@ export default {
             'Pembersih termasuk sampah B3 karena mengandung bahan kimia yang bisa berbahaya jika dibuang sembarangan.',
         },
         {
-          image: require('@/assets/anorganic/kaca.jpg'),
+          image: require('@/assets/images/anorganic/kaca.jpg'),
           question: 'Ini termasuk sampah apa?',
           options: ['Organik', 'Anorganik', 'B3'],
           correctAnswer: 'Anorganik',

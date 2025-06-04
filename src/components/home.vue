@@ -12,7 +12,7 @@
           <button class="read-more">LEARN MORE</button>
         </div>
         <div class="image-content">
-          <img src="@/assets/Recycle.jpeg" alt="Recycle Illustration" />
+          <img src="@/assets/images/Recycle.jpeg" alt="Recycle Illustration" />
         </div>
       </div>
     </section>
@@ -30,15 +30,15 @@
             daur ulang sampah.
           </p>
           <div class="facts-stats">
-            <div class="fact-item">
+            <div class="fact-item" data-aos="fade-right" data-aos-duration="2000">
               <strong>69,7 Juta</strong>
               <span>Ton Sampah Pertahun</span>
             </div>
-            <div class="fact-item">
+            <div class="fact-item" data-aos="fade-down" data-aos-duration="2000">
               <strong>60%</strong>
               <span>Komposisi Sampah Organik</span>
             </div>
-            <div class="fact-item">
+            <div class="fact-item" data-aos="fade-left" data-aos-duration="2000">
               <strong>15%</strong>
               <span>Sampah Yang DIdaur ulang</span>
             </div>
@@ -52,9 +52,9 @@
     </section>
 
     <section class="card-container">
-      <h2 class="section-title">Jenis-Jenis Sampah</h2>
+      <h2 class="section-title" data-aos="fade-down" data-aos-duration="2000">Jenis-Jenis Sampah</h2>
       <div class="card-wrapper">
-        <div class="card organik">
+        <div class="card organik" data-aos="flip-left" data-aos-duration="2000">
           <div class="card-content">
             <div class="icon">
               <i class="fas fa-leaf"></i>
@@ -75,7 +75,7 @@
             </div>
           </div>
         </div>
-        <div class="card anorganik">
+        <div class="card anorganik" data-aos="flip-up" data-aos-duration="2000">
           <div class="card-content">
             <div class="icon">
               <i class="fas fa-recycle"></i>
@@ -96,7 +96,7 @@
             </div>
           </div>
         </div>
-        <div class="card b3">
+        <div class="card b3" data-aos="flip-right" data-aos-duration="2000">
           <div class="card-content">
             <div class="icon">
               <i class="fas fa-biohazard"></i>
@@ -132,7 +132,7 @@ export default {
 /* Hero Section */
 .hero {
   background-color: #255f38;
-  padding: 67px 20px;
+  padding: 40px 20px;
 }
 
 .hero-content {

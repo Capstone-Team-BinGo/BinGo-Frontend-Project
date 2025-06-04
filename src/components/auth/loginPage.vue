@@ -52,7 +52,7 @@
           <button class="social-btn google-btn" @click="loginWithGoogle">
             <img
               class="social-icon"
-              src="@/assets/google.png"
+              src="@/assets/images/google.png"
               alt="Google logo"
             />
             Continue with Google
@@ -301,7 +301,7 @@ export default {
 
 .login-image {
   flex: 1;
-  background: url('@/assets/sampah-1.jpg') center/cover;
+  background: url('@/assets/images/sampah-1.jpg') center/cover;
   position: relative;
   display: none;
 }

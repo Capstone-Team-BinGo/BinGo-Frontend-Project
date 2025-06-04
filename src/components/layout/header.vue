@@ -2,7 +2,7 @@
   <header class="site-header">
     <div class="container">
       <div class="logo">
-        <img src="@/assets/bingo1.png" alt="Bingo Logo" class="logo-image" style="height: 40px;" />
+        <img src="@/assets/images/bingo1.png" alt="Bingo Logo" class="logo-image" style="height: 40px;" />
       </div>
 
       <!-- Mobile Menu Button -->
@@ -18,9 +18,11 @@
       <nav class="nav-links">
         <router-link to="/" class="nav-link">Beranda</router-link>
         <router-link to="/scan" class="nav-link">Scan Sampah</router-link>
-        <router-link to="/contact" class="nav-link">Edukasi</router-link>
+        <router-link to="/edukasi" class="nav-link">Edukasi</router-link>
         <router-link to="/kuis" class="nav-link">Kuis</router-link>
         <router-link to="/about" class="nav-link">Tentang Kami</router-link>
+        <router-link to="/manage" class="nav-link">Kelola Artikel</router-link>
+        <router-link to="/new" class="nav-link">Buat Artikel</router-link>
       </nav>
 
       <div class="auth-buttons">
@@ -38,7 +40,7 @@
       <div v-if="isMobileMenuOpen" class="mobile-menu">
         <router-link to="/" class="mobile-link" @click="toggleMobileMenu">Beranda</router-link>
         <router-link to="/scan" class="mobile-link" @click="toggleMobileMenu">Scan Sampah</router-link>
-        <router-link to="/contact" class="mobile-link" @click="toggleMobileMenu">Edukasi</router-link>
+        <router-link to="/edukasi" class="mobile-link" @click="toggleMobileMenu">Edukasi</router-link>
         <router-link to="/kuis" class="mobile-link" @click="toggleMobileMenu">Kuis</router-link>
         <router-link to="/about" class="mobile-link" @click="toggleMobileMenu">Tentang Kami</router-link>
 

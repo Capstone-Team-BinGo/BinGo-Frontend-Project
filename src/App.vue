@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import HeaderComponent from './components/header.vue';
-import FooterComponent from './components/footer.vue';
-import ForgotPasswordModal from './components/forgotPasswordPage.vue';
+import HeaderComponent from './components/layout/header.vue';
+import FooterComponent from './components/layout/footer.vue';
+import ForgotPasswordModal from './components/auth/forgotPasswordPage.vue';
 
 export default {
   name: 'App',

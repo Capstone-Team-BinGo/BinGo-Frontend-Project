@@ -33,27 +33,27 @@ export default {
         {
           name: 'Plastik',
           description: 'Kantong plastik, botol, dan sedotan.',
-          image: require('@/assets/anorganic/plastik.jpeg'),
+          image: require('@/assets/images/anorganic/plastik.jpeg'),
         },
         {
           name: 'Kaca',
           description: 'Botol kaca, gelas kaca, toples kaca, pecahan kaca.',
-          image: require('@/assets/anorganic/kaca.jpg'),
+          image: require('@/assets/images/anorganic/kaca.jpg'),
         },
         {
           name: 'Logam',
           description: 'Kaleng, besi, aluminium, tutup botol.',
-          image: require('@/assets/anorganic/logam.jpeg'),
+          image: require('@/assets/images/anorganic/logam.jpeg'),
         },
         {
           name: 'Styrofoam',
           description: 'Wadah makanan, gelas, mangkuk mie instan, cool box.',
-          image: require('@/assets/anorganic/styrofoam.jpg'),
+          image: require('@/assets/images/anorganic/styrofoam.jpg'),
         },
         {
           name: 'Karet Sintetis',
           description: 'Sarung tangan, sepatu, ban, selang air.',
-          image: require('@/assets/anorganic/karet.jpg'),
+          image: require('@/assets/images/anorganic/karet.jpg'),
         },
       ],
     };

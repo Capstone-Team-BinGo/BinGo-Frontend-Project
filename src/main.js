@@ -4,6 +4,10 @@ import './style.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 import router from './router/index';
 import 'leaflet/dist/leaflet.css';
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
-
-createApp(App).use(router).mount('#app');
+const app = createApp(App);
+app.use(router);
+app.use(ElementPlus);
+app.mount('#app');

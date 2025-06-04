@@ -1,6 +1,6 @@
 <template>
   <div class="organic-waste-gallery">
-    <h2 class="gallery-title">Jenis Sampah B3 (Bahan Berbahaya, Beracun.)</h2>
+    <h2 class="gallery-title">Jenis Sampah Organik</h2>
     <div class="gallery-grid">
       <!-- Card 1 -->
       <div
@@ -26,24 +26,34 @@
 
 <script>
 export default {
-  name: 'B3List',
+  name: 'OrganicList',
   data() {
     return {
       organicItems: [
         {
-          name: 'Limbah Rumah Tangga',
-          description: 'Baterai bekas, obat kadaluarsa, thinner, aerosol.',
-          image: require('@/assets/b3/baterai.jpg'),
+          name: 'Sisa Makanan',
+          description: 'Nasi, sayuran, buah, dan sisa makanan lainnya',
+          image: require('@/assets/images/organic/sisamakanan.jpeg'),
         },
         {
-          name: 'Limbah Pembersih & Kimia',
-          description: 'Pemutih pakaian, desinfektan, pembersih toilet.',
-          image: require('@/assets/b3/pembersih.jpg'),
+          name: 'Daun & Tanaman',
+          description: 'Daun kering, ranting, rumput potong, bunga layu',
+          image: require('@/assets/images/organic/daun.jpeg'),
         },
         {
-          name: 'Limbah Industri & Otomotif',
-          description: 'Oli bekas, pelumas, aki, cairan rem dan radiator.',
-          image: require('@/assets/b3/oli.jpg'),
+          name: 'Ampas Kopi/Teh',
+          description: 'Ampas kopi, teh celup bekas, dan sejenisnya',
+          image: require('@/assets/images/organic/kopi.jpeg'),
+        },
+        {
+          name: 'Cangkang Telur',
+          description: 'Cangkang telur ayam, bebek, atau telur lainnya',
+          image: require('@/assets/images/organic/telur.jpeg'),
+        },
+        {
+          name: 'Tulang Hewan',
+          description: 'Tulang ayam, sapi, ikan, dan hewan lainnya',
+          image: require('@/assets/images/organic/tulang.jpg'),
         },
       ],
     };
