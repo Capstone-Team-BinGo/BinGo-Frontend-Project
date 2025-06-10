@@ -12,15 +12,15 @@
       <p class="waste-description">{{ analysisResult.description }}</p>
 
       <div class="disposal-info" v-if="analysisResult.disposalSteps?.length">
-        <h4 class="disposal-title"><strong>Cara Pembuangan yang Tepat:</strong></h4>
+        <h4 class="disposal-title"><i class="fas fa-trash-alt"></i> Cara Pembuangan yang Tepat:</h4>
         <ul class="disposal-steps">
           <li v-for="(step, index) in analysisResult.disposalSteps" :key="index">
-            {{ step }}
+            <i class="fas fa-check-circle"></i> {{ step }}
           </li>
         </ul>
       </div>
       <div v-else class="disposal-info">
-        <p>Informasi pembuangan tidak tersedia</p>
+        <p><i class="fas fa-info-circle"></i> Informasi pembuangan tidak tersedia</p>
       </div>
     </div>
   </section>
@@ -38,92 +38,126 @@ export default {
 </script>
 
 <style scoped>
-/* Tetap sama dengan style results section sebelumnya */
-/* Results Section */
 .results-section {
   background-color: white;
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
-  /*display: none;*/
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+  border: 1px solid rgba(46, 125, 50, 0.1);
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .results-title {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   color: #2e7d32;
   text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 
 .result-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
-}
-
-.waste-name {
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.waste-category {
-  margin-bottom: 15px;
-}
-
-.category-badge {
-  background-color: #4CAF50;
-  color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: bold;
 }
 
 .waste-icon {
-  font-size: 60px;
-  margin-bottom: 15px;
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: #4CAF50;
+}
+
+.waste-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.waste-category {
+  margin-bottom: 1.5rem;
+}
+
+.category-badge {
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
 }
 
 .waste-description {
   text-align: center;
-  max-width: 600px;
-  margin-bottom: 20px;
+  max-width: 700px;
+  margin-bottom: 2rem;
   color: #555;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .disposal-info {
   background-color: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
+  padding: 1.5rem;
+  border-radius: 12px;
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .disposal-title {
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-weight: 600;
+  margin-bottom: 1rem;
   color: #333;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.disposal-title i {
+  color: #4CAF50;
 }
 
 .disposal-steps {
   list-style-type: none;
+  padding-left: 0;
 }
 
 .disposal-steps li {
-  margin-bottom: 8px;
-  position: relative;
-  padding-left: 20px;
+  margin-bottom: 0.8rem;
+  padding-left: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  line-height: 1.5;
 }
 
-.disposal-steps li:before {
-  content: '•';
-  color: #4caf50;
-  font-size: 20px;
-  position: absolute;
-  left: 0;
-  top: -3px;
+.disposal-steps li i {
+  color: #4CAF50;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .results-section {
+    padding: 1.5rem;
+  }
+  
+  .waste-name {
+    font-size: 1.5rem;
+  }
+  
+  .waste-description {
+    font-size: 1rem;
+  }
 }
 </style>

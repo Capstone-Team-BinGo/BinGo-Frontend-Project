@@ -2,12 +2,16 @@
   <header class="site-header">
     <div class="container">
       <div class="logo">
-        <span class="logo-text">Bingo</span>
+        <span class="logo-text">BinGo!</span>
       </div>
 
       <!-- Mobile Menu Button -->
-      <button class="mobile-menu-button" @click="toggleMobileMenu" aria-label="Toggle menu">
-        <div class="hamburger" :class="{ 'active': isMobileMenuOpen }">
+      <button
+        class="mobile-menu-button"
+        @click="toggleMobileMenu"
+        aria-label="Toggle menu"
+      >
+        <div class="hamburger" :class="{ active: isMobileMenuOpen }">
           <span class="bar"></span>
           <span class="bar"></span>
           <span class="bar"></span>
@@ -16,67 +20,166 @@
 
       <!-- Navigation Links (Desktop) -->
       <nav class="nav-links">
-        <router-link to="/" class="nav-link">Beranda</router-link>
-        <router-link to="/scan" class="nav-link">Scan Sampah</router-link>
-        <!--<router-link to="/manage" class="nav-link">Kelola Artikel</router-link>
-        <router-link to="/new" class="nav-link">Buat Artikel</router-link>-->
-        <router-link v-if="authStore.isAuthenticated" to="/edukasi" class="nav-link">Edukasi</router-link>
-        <router-link v-if="authStore.isAuthenticated" to="/kuis" class="nav-link">Kuis</router-link>
-        <router-link to="/about" class="nav-link">Tentang Kami</router-link>
+        <template v-if="!isAdminPage">
+          <router-link to="/" class="nav-link">Beranda</router-link>
+          <router-link to="/scan" class="nav-link">Scan Sampah</router-link>
+          <router-link
+            v-if="authStore.isAuthenticated"
+            to="/edukasi"
+            class="nav-link"
+            >Edukasi</router-link
+          >
+          <router-link
+            v-if="authStore.isAuthenticated"
+            to="/kuis"
+            class="nav-link"
+            >Kuis</router-link
+          >
+          <router-link to="/about" class="nav-link">Tentang Kami</router-link>
+        </template>
+
+        <template v-else>
+          <router-link
+            v-if="isAdminLoggedIn"
+            to="/admin/manage"
+            class="nav-link"
+            >Kelola Artikel</router-link
+          >
+          <router-link v-if="isAdminLoggedIn" to="/admin/new" class="nav-link"
+            >Buat Artikel</router-link
+          >
+          <router-link
+            v-if="!isAdminLoggedIn"
+            to="/admin/login"
+            class="nav-link"
+            >Login Admin</router-link
+          >
+          <router-link
+            v-if="!isAdminLoggedIn"
+            to="/admin/register"
+            class="nav-link"
+            >Register Admin</router-link
+          >
+        </template>
       </nav>
 
-      <div class="auth-buttons" v-if="!authStore.isAuthenticated">
-        <button class="btn sign-in" @click="$emit('open-login')">
-      <i class="fas fa-user"></i> Gabung
-    </button>
-  <!--
-      <router-link to="/register" class="btn sign-up">
-       <i class="fas fa-user-plus"></i> Daftar
-  </router-link>
--->
-</div>
+      <!-- User/Admin Controls -->
+      <div class="auth-controls">
+        <!-- User Controls -->
+        <template v-if="!isAdminPage">
 
-<div class="profile-wrapper" v-if="authStore.isAuthenticated">
-  <div class="profile-display">
-    <i class="fas fa-user-circle fa-lg"></i>
-    <span class="username">{{ authStore.user?.displayName || authStore.user?.email }}</span>
-  </div>
-  <div class="logout-dropdown">
-    <button @click="logout" class="logout-button">Keluar</button>
-  </div>
-</div>
+          <div v-if="authStore.isAuthenticated" class="profile-wrapper">
+            <div class="profile-display">
+              <i class="fas fa-user-circle"></i>
+              <span class="username">{{
+                authStore.user?.displayName || authStore.user?.email
+              }}</span>
+            </div>
+            <div class="logout-dropdown">
+              <button @click="logout" class="logout-button">Keluar</button>
+            </div>
+          </div>
+        </template>
 
-
-
+        <!-- Admin Controls -->
+        <template v-else>
+          <div v-if="isAdminLoggedIn" class="admin-controls">
+            <div class="profile-display">
+              <i class="fas fa-user-circle"></i>
+              <span class="username">{{ adminName }}</span>
+            </div>
+            <button @click="logoutAdmin" class="logout-button">Logout</button>
+          </div>
+        </template>
+      </div>
     </div>
 
     <!-- Mobile Menu (Hidden on Desktop) -->
     <transition name="slide-down">
       <div v-if="isMobileMenuOpen" class="mobile-menu">
-        <router-link to="/" class="mobile-link" @click="toggleMobileMenu">Beranda</router-link>
-        <router-link to="/scan" class="mobile-link" @click="toggleMobileMenu">Scan Sampah</router-link>
-        <router-link v-if="authStore.isAuthenticated" to="/edukasi" class="mobile-link" @click="toggleMobileMenu">Edukasi</router-link>
-        <router-link v-if="authStore.isAuthenticated" to="/kuis" class="mobile-link" @click="toggleMobileMenu">Kuis</router-link>
-        <router-link to="/about" class="mobile-link" @click="toggleMobileMenu">Tentang Kami</router-link>
-        <div class="mobile-auth" v-if="!authStore.isAuthenticated">
-          <button class="btn mobile-sign-in" @click="$emit('open-login')">
-      <i class="fas fa-user"></i> Gabung
-    </button>
-  <!--
-    <router-link to="/register" class="btn mobile-sign-up" @click="toggleMobileMenu">
-      <i class="fas fa-user-plus"></i> Daftar
-    </router-link>
-  -->
-</div>
-<div class="mobile-auth" v-if="authStore.isAuthenticated">
-  <div class="profile-mobile">
-    <i class="fas fa-user-circle fa-lg"></i>
-    <span class="username">{{ authStore.user?.displayName || authStore.user?.email }}</span>
-  </div>
-  <button class="mobile-logout-btn" @click="logout">
-    <i class="fas fa-sign-out-alt"></i> Keluar
-  </button>
-</div>
+        <!-- Common Mobile Links -->
+        <template v-if="!isAdminPage">
+          <router-link to="/" class="mobile-link" @click="toggleMobileMenu"
+            >Beranda</router-link
+          >
+          <router-link to="/scan" class="mobile-link" @click="toggleMobileMenu"
+            >Scan Sampah</router-link
+          >
+          <router-link
+            v-if="authStore.isAuthenticated"
+            to="/edukasi"
+            class="mobile-link"
+            @click="toggleMobileMenu"
+            >Edukasi</router-link
+          >
+          <router-link
+            v-if="authStore.isAuthenticated"
+            to="/kuis"
+            class="mobile-link"
+            @click="toggleMobileMenu"
+            >Kuis</router-link
+          >
+          <router-link to="/about" class="mobile-link" @click="toggleMobileMenu"
+            >Tentang Kami</router-link
+          >
+        </template>
+
+        <template v-else>
+          <router-link
+            v-if="isAdminLoggedIn"
+            to="/admin/manage"
+            class="mobile-link"
+            @click="toggleMobileMenu"
+            >Kelola Artikel</router-link
+          >
+          <router-link
+            v-if="isAdminLoggedIn"
+            to="/admin/new"
+            class="mobile-link"
+            @click="toggleMobileMenu"
+            >Buat Artikel</router-link
+          >
+          <router-link
+            v-if="!isAdminLoggedIn"
+            to="/admin/login"
+            class="mobile-link"
+            @click="toggleMobileMenu"
+            >Login Admin</router-link
+          >
+          <router-link
+            v-if="!isAdminLoggedIn"
+            to="/admin/register"
+            class="mobile-link"
+            @click="toggleMobileMenu"
+            >Register Admin</router-link
+          >
+        </template>
+
+        <!-- Common Mobile Auth Section -->
+        <div class="mobile-auth">
+
+          <template v-if="!isAdminPage && authStore.isAuthenticated">
+            <div class="profile-mobile">
+              <i class="fas fa-user-circle fa-lg"></i>
+              <span class="username">{{
+                authStore.user?.displayName || authStore.user?.email
+              }}</span>
+            </div>
+            <button class="mobile-logout-btn" @click="logout">
+              <i class="fas fa-sign-out-alt"></i> Keluar
+            </button>
+          </template>
+
+          <template v-if="isAdminPage && isAdminLoggedIn">
+            <div class="profile-mobile">
+              <i class="fas fa-user-circle fa-lg"></i>
+              <span class="username">{{ adminName }}</span>
+            </div>
+            <button class="mobile-logout-btn" @click="logoutAdmin">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </template>
+        </div>
       </div>
     </transition>
   </header>
@@ -84,6 +187,7 @@
 
 <script>
 import { useAuthStore } from '@/stores/auth';
+import { getAccessToken, removeAccessToken, getUserData } from '@/utils/auth';
 
 export default {
   name: 'HeaderComponent',
@@ -107,6 +211,9 @@ export default {
   data() {
     return {
       isMobileMenuOpen: false,
+      isAdminPage: false,
+      isAdminLoggedIn: false,
+      adminName: '',
     };
   },
   methods: {
@@ -116,17 +223,74 @@ export default {
     closeMobileMenu() {
       this.isMobileMenuOpen = false;
     },
+    checkAdminRoute() {
+      this.isAdminPage = this.$route.path.startsWith('/admin');
+      this.isAdminLoggedIn = !!getAccessToken();
+
+      if (this.isAdminLoggedIn) {
+        const userData = getUserData();
+        this.adminName = userData?.nama_lengkap || 'Admin';
+      }
+    },
+    logoutAdmin() {
+      removeAccessToken();
+      localStorage.removeItem('userData'); // Hapus juga data user
+      this.isAdminLoggedIn = false;
+      this.$router.push('/admin/login');
+    },
   },
   watch: {
     $route() {
       this.closeMobileMenu();
+      this.checkAdminRoute();
     },
+  },
+  created() {
+    this.checkAdminRoute();
   },
 };
 </script>
 
-
 <style scoped>
+/* Admin Header Styles */
+.admin-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-controls .profile-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-controls .fa-user-circle {
+  font-size: 1.2rem;
+  color: #4b5563;
+}
+
+.admin-controls .username {
+  font-size: 0.9rem;
+}
+
+/* Style tombol logout */
+.logout-button {
+  padding: 0.5rem 1rem;
+  background-color: #f3f4f6;
+  color: #dc3545;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Existing styles... */
 .site-header {
   background-color: white;
   padding: 2rem 2rem;
@@ -149,7 +313,7 @@ export default {
 .logo-text {
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #10B981, #065F46);
+  background: linear-gradient(90deg, #10b981, #065f46);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -174,7 +338,7 @@ export default {
 }
 
 .nav-link:hover {
-  color: #42835A;
+  color: #42835a;
 }
 
 .nav-link::after {
@@ -184,7 +348,7 @@ export default {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #10B981, #065F46);
+  background: linear-gradient(90deg, #10b981, #065f46);
   transition: width 0.3s ease;
 }
 
@@ -193,7 +357,7 @@ export default {
 }
 
 .router-link-exact-active {
-  color: #42835A;
+  color: #42835a;
   font-weight: 600;
 }
 
@@ -225,14 +389,14 @@ export default {
 }
 
 .sign-in:hover {
-  background: #42835A;
+  background: #42835a;
   color: #ffffff;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
 .sign-up {
-  background: #42835A;
+  background: #42835a;
   color: white;
   border: none;
 }
@@ -305,7 +469,7 @@ export default {
 }
 
 .mobile-link:hover {
-  color: #42835A;
+  color: #42835a;
 }
 
 .mobile-auth {
@@ -519,7 +683,9 @@ export default {
   }
 
   .nav-links,
-  .auth-buttons, .profile-display, .logout-dropdown {
+  .auth-buttons,
+  .profile-display,
+  .logout-dropdown {
     display: none;
   }
 
@@ -529,6 +695,10 @@ export default {
 
   .container {
     padding: 0;
+  }
+
+  .admin-controls {
+    display: none;
   }
 }
 

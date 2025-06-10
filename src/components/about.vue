@@ -190,7 +190,6 @@
     margin: 0 auto;
     padding: 2rem;
     color: #1F2937;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
   
   /* Typography */

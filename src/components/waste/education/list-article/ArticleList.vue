@@ -1,15 +1,26 @@
 <template>
   <section class="article-grid">
-    <div v-if="articles.length === 0" class="empty-state">
+    <div v-if="isLoading" class="empty-state">
+      <i class="fas fa-spinner fa-spin"></i>
+      <h3>Loading articles...</h3>
+    </div>
+    <div v-else-if="error" class="empty-state">
+      <i class="fas fa-exclamation-triangle"></i>
+      <h3>Error loading articles</h3>
+      <p>{{ error }}</p>
+    </div>
+    <div v-else-if="articles.length === 0" class="empty-state">
       <i class="fas fa-newspaper"></i>
       <h3>No articles found</h3>
       <p>Try changing your filter or check back later</p>
     </div>
-    <ArticleCard
-      v-for="article in articles"
-      :key="article.id"
-      :article="article"
-    />
+    <template v-else>
+      <ArticleCard
+        v-for="article in articles"
+        :key="article.id"
+        :article="article"
+      />
+    </template>
   </section>
 </template>
 
@@ -23,6 +34,14 @@ export default {
     articles: {
       type: Array,
       required: true
+    },
+    isLoading: {
+      type: Boolean,
+      default: false
+    },
+    error: {
+      type: String,
+      default: null
     }
   }
 };

@@ -12,7 +12,7 @@
           <h3 class="related-card-title">{{ article.title }}</h3>
           <p class="related-card-excerpt">{{ article.excerpt }}</p>
           <RouterLink
-            :to="'/artikel/' + article.id"
+            :to="'/article/' + article.id"
             class="read-more-btn"
           >
             Selengkapnya

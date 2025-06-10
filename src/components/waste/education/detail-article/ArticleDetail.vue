@@ -4,7 +4,7 @@
     <div class="article-content">
       <h1 class="article-title">{{ article.title }}</h1>
       <div class="article-meta">
-        <span class="article-category">{{ formatCategory(article.category) }}</span>
+        <!-- Hapus bagian kategori -->
         <span class="article-date">Dipublikasikan: {{ formatDate(article.date) }}</span>
       </div>
       <div class="article-body" v-html="article.content"></div>
@@ -25,15 +25,8 @@ export default {
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(dateString).toLocaleDateString('id-ID', options);
-    },
-    formatCategory(category) {
-      const categories = {
-        'organik': 'Organik',
-        'anorganik': 'Anorganik',
-        'b3': 'B3'
-      };
-      return categories[category] || category;
     }
+    // Hapus method formatCategory
   }
 };
 </script>
@@ -70,17 +63,7 @@ export default {
   color: #666;
 }
 
-.article-category {
-  display: inline-block;
-  padding: 4px 12px;
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  margin-right: 15px;
-}
-
+/* Hapus style .article-category */
 .article-body {
   font-size: 1.1rem;
   line-height: 1.8;

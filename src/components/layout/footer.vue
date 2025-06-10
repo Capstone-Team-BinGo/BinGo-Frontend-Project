@@ -5,17 +5,26 @@
         <!-- Brand Column -->
         <div class="brand-column">
           <div class="logo-container">
-            <span class="logo-text">Bingo</span>
+            <span class="logo-text">BinGo!</span>
           </div>
           <p class="footer-text">
             Platform edukasi pengelolaan sampah dengan pendekatan menyenangkan dan interaktif.
           </p>
-          <div class="social-links">
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-            <a href="#" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
-          </div>
+          <div class="dev-team" v-if="devTeam.length > 0">
+  <div class="team-members">
+    <a
+      v-for="member in devTeam"
+      :key="member.login"
+      :href="member.html_url"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="team-member"
+    >
+      <img :src="member.avatar_url" :alt="member.login" class="avatar-stack">
+      <span>{{ member.name || member.login }}</span>
+    </a>
+  </div>
+</div>
         </div>
 
         <!-- Quick Links -->
@@ -53,14 +62,13 @@
       <!-- Copyright -->
       <div class="footer-bottom">
         <div class="copyright">
-          &copy; 2023 Bingo Sampah. All rights reserved.
+          &copy; 2023 BinGo! Sampah. All rights reserved.
         </div>
         <div class="legal-links">
-          <a href="#">Kebijakan Privasi</a>
+          <a href="#" @click.prevent="$emit('open-privacy')">Kebijakan Privasi</a>
           <span>•</span>
-          <a href="#">Syarat & Ketentuan</a>
-          <span>•</span>
-          <a href="#">Peta Situs</a>
+          <a href="#" @click.prevent="$emit('open-terms')">Syarat & Layanan</a>
+
         </div>
       </div>
     </div>
@@ -98,9 +106,28 @@ export default {
     showAbout() {
       this.$emit('navigate', 'about');
     }
+  },
+  data() {
+    return {
+      devTeam: [
+        {
+          html_url: "https://github.com/vagabondzz",
+          avatar_url: "https://avatars.githubusercontent.com/u/1234567?v=4"
+        },
+        {
+          html_url: "https://github.com/janedoe",
+          avatar_url: "https://avatars.githubusercontent.com/u/2345678?v=4"
+        },
+        {
+          html_url: "https://github.com/rafi123",
+          avatar_url: "https://avatars.githubusercontent.com/u/3456789?v=4"
+        }
+      ]
+    };
   }
-};
+}
 </script>
+
 
 <style scoped>
 /* Base Styles */
@@ -153,27 +180,44 @@ export default {
   font-size: 15px;
 }
 
-.social-links {
-  display: flex;
-  gap: 15px;
+.dev-team {
+  margin-top: 20px;
 }
 
-.social-links a {
-  color: #cbd5e1;
-  background: rgba(255, 255, 255, 0.1);
-  width: 36px;
-  height: 36px;
+.avatar-stack {
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
+  border: 3px solid #010302;
+  margin-left: -20px;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin-right: 5px;
 }
 
-.social-links a:hover {
-  background: #42835A;
-  color: white;
-  transform: translateY(-3px);
+.avatar-stack:hover {
+  transform: translateY(-5px);
+  z-index: 2;
+  border-color: #10b981;
+}
+
+
+.avatar-stack:hover::after {
+  opacity: 1;
+  bottom: -40px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 480px) {
+  .stacked-avatar {
+    width: 36px;
+    height: 36px;
+    margin-left: -15px;
+  }
 }
 
 /* Links Column */
@@ -314,11 +358,11 @@ export default {
   .footer-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .footer-bottom {
     flex-direction: row;
   }
-  
+
   .copyright {
     margin-bottom: 0;
   }
@@ -328,12 +372,12 @@ export default {
   .footer {
     padding-top: 60px;
   }
-  
+
   .footer-wave {
     top: -40px;
     height: 40px;
   }
-  
+
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 30px;

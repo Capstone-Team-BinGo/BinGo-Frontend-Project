@@ -1,7 +1,7 @@
 <template>
   <section class="upload-section">
     <div class="upload-options">
-      <div class="upload-btn" @click="triggerFileInput">
+      <div class="upload-btn" @click="triggerFileInput" aria-label="Upload gambar">
         <i class="fa-solid fa-cloud-arrow-up"></i>
         <span>Unggah Gambar</span>
         <input
@@ -10,6 +10,7 @@
           accept="image/*"
           @change="handleFileUpload"
           ref="fileInput"
+          style="display: none"
         />
       </div>
       <div class="upload-btn" id="camera-button" @click="openCamera">
@@ -140,20 +141,20 @@ export default {
 </script>
 
 <style scoped>
-/* Tetap sama dengan style yang sebelumnya untuk upload section */
 .upload-section {
   background-color: white;
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 30px;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+  border: 1px solid rgba(46, 125, 50, 0.1);
 }
 
 .upload-options {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: 2rem;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
@@ -162,43 +163,71 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 200px;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
+  width: 220px;
+  height: 220px;
+  border: 2px dashed rgba(76, 175, 80, 0.3);
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   background-color: #f9f9f9;
   text-align: center;
-  padding: 20px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4CAF50, #2E7D32);
+  transition: all 0.3s;
+  transform: scaleX(0);
 }
 
 .upload-btn:hover {
   border-color: #4caf50;
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.upload-btn:hover::before {
+  transform: scaleX(1);
 }
 
 .upload-btn i {
-  font-size: 48px;
+  font-size: 3.5rem;
   color: #4caf50;
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s;
+}
+
+.upload-btn:hover i {
+  transform: scale(1.1);
 }
 
 .upload-btn span {
-  font-size: 16px;
+  font-size: 1.2rem;
   color: #555;
-}
-
-.file-input {
-  display: none;
+  font-weight: 500;
 }
 
 .preview-container {
-  margin-top: 30px;
+  margin-top: 2rem;
   text-align: center;
   display: none;
   flex-direction: column;
   align-items: center;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .preview-header {
@@ -206,7 +235,14 @@ export default {
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 1.5rem;
+}
+
+.preview-title {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .close-btn {
@@ -214,72 +250,81 @@ export default {
   border: none;
   cursor: pointer;
   color: #ffffff;
-  font-size: 20px;
-  transition: color 0.3s;
-  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
 }
 
 .close-btn:hover {
-  color: #333;
+  background: #e33434;
+  transform: rotate(90deg);
 }
 
-.preview-title {
-  margin-bottom: 15px;
-  color: #333;
+.close-btn i {
+  font-size: 1.2rem;
 }
 
 .image-preview {
-  max-width: 60%;
+  max-width: 100%;
   max-height: 400px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .analyze-btn {
-  background-color: #4caf50;
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
   color: white;
   border: none;
-  padding: 12px 25px;
-  font-size: 16px;
-  border-radius: 4px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 50px;
   cursor: pointer;
-  margin-top: 20px;
-  transition: background-color 0.3s;
+  margin-top: 2rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .analyze-btn:hover {
-  background-color: #3e8e41;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
 }
 
 .analyze-btn:disabled {
-  background-color: #cccccc;
+  background: #cccccc;
+  box-shadow: none;
+  transform: none;
   cursor: not-allowed;
 }
 
-/* Loading Animation */
 .loading {
   display: none;
   text-align: center;
-  margin: 20px 0;
+  margin: 2rem 0;
 }
 
 .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   border-top: 4px solid #4caf50;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   animation: spin 1s linear infinite;
-  margin: 0 auto 15px;
+  margin: 0 auto 1.5rem;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.loading p {
+  color: #555;
+  font-size: 1.1rem;
 }
 
 @media (max-width: 768px) {
@@ -287,16 +332,32 @@ export default {
     flex-direction: column;
     align-items: center;
   }
+
+  .upload-btn {
+    max-width: 300px;
+  }
+
+  .image-preview {
+    max-height: 300px;
+  }
 }
 
 @media (max-width: 480px) {
-  .upload-btn {
-    width: 150px;
-    height: 150px;
+  .upload-section {
+    padding: 1.5rem;
   }
 
-  #camera-button {
-    display: none; /* Sembunyikan tombol kamera di layar kecil */
+  .upload-btn {
+    height: 180px;
+  }
+
+  .upload-btn i {
+    font-size: 2.5rem;
+  }
+
+  .analyze-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
   }
 }
 </style>

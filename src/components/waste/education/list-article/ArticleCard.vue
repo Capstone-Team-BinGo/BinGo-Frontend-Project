@@ -1,7 +1,7 @@
 <template>
   <article class="article-card" @click="navigateToArticle">
     <div class="card-image">
-      <img :src="article.image" :alt="article.title" class="article-image">
+      <img :src="article.image" :alt="article.title" class="article-image" />
     </div>
     <div class="card-content">
       <div class="card-meta">
@@ -9,12 +9,9 @@
           <i class="far fa-calendar-alt"></i>
           {{ formatDate(article.date) }}
         </span>
-        <span class="card-badge" :class="article.category">
-          {{ formatCategory(article.category) }}
-        </span>
       </div>
       <h3 class="card-title">{{ article.title }}</h3>
-      <p class="card-excerpt">{{ article.excerpt }}</p>
+      <p class="card-excerpt">{{ stripHtml(article.excerpt) }}</p>
       <div class="card-footer">
         <button class="read-more-btn">
           Read More <i class="fas fa-arrow-right"></i>
@@ -30,26 +27,35 @@ export default {
   props: {
     article: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(dateString).toLocaleDateString('id-ID', options);
     },
-    formatCategory(category) {
-      const categories = {
-        'organik': 'Organik',
-        'anorganik': 'Anorganik',
-        'b3': 'B3'
-      };
-      return categories[category] || category;
-    },
     navigateToArticle() {
       this.$router.push('/article/' + this.article.id);
-    }
-  }
+    },
+    stripHtml(html) {
+      // Membuat elemen div sementara untuk menampung konten HTML
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      // Mengambil teks saja tanpa tag HTML
+      return tmp.textContent || tmp.innerText || '';
+    },
+
+    getFirstSentence(description) {
+      // Bersihkan dulu dari tag HTML
+      const cleanText = this.stripHtml(description);
+      // Get first sentence or first 100 characters
+      const firstSentence = cleanText.split('.')[0];
+      return firstSentence.length > 100
+        ? `${firstSentence.substring(0, 100)}...`
+        : firstSentence;
+    },
+  },
 };
 </script>
 
@@ -86,26 +92,6 @@ export default {
 
 .article-card:hover .article-image {
   transform: scale(1.05);
-}
-
-.card-badge {
-  padding: 0.3rem 0.8rem;
-  border-radius: 30px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: white;
-}
-
-.card-badge.organik {
-  background: #4caf50;
-}
-
-.card-badge.anorganik {
-  background: #2196f3;
-}
-
-.card-badge.b3 {
-  background: #f44336;
 }
 
 .card-content {

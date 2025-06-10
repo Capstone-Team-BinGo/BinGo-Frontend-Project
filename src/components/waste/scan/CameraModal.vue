@@ -94,8 +94,52 @@ export default {
 </script>
 
 <style scoped>
-/* Tetap sama dengan style camera modal sebelumnya */
-/* Camera Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.3s;
+}
+
+.close-modal:hover {
+  color: #333;
+  transform: rotate(90deg);
+}
+
+h2 {
+  font-size: 1.8rem;
+  color: #2e7d32;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
 .camera-container {
   position: relative;
   width: 100%;
@@ -109,33 +153,46 @@ export default {
   height: auto;
   max-height: 70vh;
   background: #000;
-  border-radius: 8px;
+  border-radius: 12px;
   display: block;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .camera-controls {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  gap: 20px;
+  margin-top: 1.5rem;
+  gap: 1.5rem;
 }
 
 .capture-btn {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background: #fff;
-  border: none;
+  background: white;
+  border: 5px solid #f5f5f5;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 28px;
+  color: #2e7d32;
+  transition: all 0.3s;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.capture-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.capture-btn:active {
+  transform: scale(0.95);
 }
 
 .switch-btn {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   border: none;
@@ -143,45 +200,35 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  color: white;
-}
-
-/* Modal Styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  border-radius: 8px;
-  padding: 30px;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-}
-
-.close-modal {
-  position: absolute;
-  top: 15px;
-  right: 15px;
   font-size: 24px;
-  cursor: pointer;
-  color: #888;
+  color: white;
+  transition: all 0.3s;
+  backdrop-filter: blur(5px);
 }
 
-.close-modal:hover {
-  color: #333;
+.switch-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .capture-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+  }
+  
+  .switch-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
 }
 </style>

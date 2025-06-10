@@ -8,9 +8,14 @@
         :key="index"
         @click="$emit('show-history', item)"
       >
+        <div class="item-overlay">
+          <i class="fas fa-eye"></i> Lihat Detail
+        </div>
         <img :src="item.image" class="history-image" alt="History Image" />
-        <div class="history-type">{{ item.result.itemName }}</div>
-        <div class="history-date">{{ formatDate(item.timestamp) }}</div>
+        <div class="history-details">
+          <div class="history-type">{{ item.result.itemName }}</div>
+          <div class="history-date">{{ formatDate(item.timestamp) }}</div>
+        </div>
       </div>
     </div>
   </section>
@@ -37,68 +42,108 @@ export default {
 </script>
 
 <style scoped>
-/* Tetap sama dengan style history section sebelumnya */
-/* History Section */
 .history-section {
   background-color: white;
-  border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(46, 125, 50, 0.1);
 }
 
 .history-title {
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
   color: #2e7d32;
+  font-size: 1.8rem;
+  font-weight: 600;
 }
 
 .history-items {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .history-item {
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 15px;
+  border-radius: 12px;
+  overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .history-item:hover {
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.item-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(46, 125, 50, 0.8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 2;
+  font-weight: 600;
+  font-size: 1.2rem;
+  gap: 0.5rem;
+}
+
+.history-item:hover .item-overlay {
+  opacity: 1;
 }
 
 .history-image {
   width: 100%;
-  height: 120px;
+  height: 180px;
   object-fit: cover;
-  border-radius: 4px;
-  margin-bottom: 10px;
+  display: block;
+}
+
+.history-details {
+  padding: 1rem;
+  background: white;
 }
 
 .history-type {
-  font-weight: bold;
-  color: #4caf50;
-  margin-bottom: 5px;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 0.3rem;
+  font-size: 1.1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .history-date {
-  font-size: 12px;
+  font-size: 0.85rem;
   color: #888;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
+  .history-section {
+    padding: 1.5rem;
+  }
+  
   .history-items {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   }
 }
 
 @media (max-width: 480px) {
   .history-items {
     grid-template-columns: 1fr;
+  }
+  
+  .history-image {
+    height: 150px;
   }
 }
 </style>
