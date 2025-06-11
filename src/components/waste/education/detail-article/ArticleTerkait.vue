@@ -10,7 +10,7 @@
         <img :src="article.image" :alt="article.title" class="related-image">
         <div class="related-content">
           <h3 class="related-card-title">{{ article.title }}</h3>
-          <p class="related-card-excerpt">{{ article.excerpt }}</p>
+          <p class="related-card-excerpt">{{ stripHtml(article.excerpt) }}</p>
           <RouterLink
             :to="'/article/' + article.id"
             class="read-more-btn"
@@ -30,6 +30,15 @@ export default {
     articles: {
       type: Array,
       required: true
+    }
+  },
+  methods: {
+    stripHtml(html) {
+      // Membuat elemen div sementara untuk menampung konten HTML
+      const tmp = document.createElement("div");
+      tmp.innerHTML = html;
+      // Mengambil teks saja tanpa tag HTML
+      return tmp.textContent || tmp.innerText || "";
     }
   }
 };

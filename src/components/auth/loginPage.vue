@@ -3,23 +3,23 @@
       <div class="login-card">
         <div class="login-form">
           <div class="logo">
-            <span class="logo-text">Bingo</span>
+            <span class="logo-text">BinGo!</span>
             <h1>Masuk Ke Akun Anda</h1>
-          <p>Mulai kelola sampah dengan lebih bijak bersama Bingo</p>
+          <p>Mulai kelola sampah dengan lebih bijak bersama BinGo!</p>
           </div>
-          
+
           <form @submit.prevent="handleLogin">
             <div class="form-group">
               <label for="email">Alamat Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                v-model="email" 
-                placeholder="Masukkan Email" 
+              <input
+                type="email"
+                id="email"
+                v-model="email"
+                placeholder="Masukkan Email"
                 required
               >
             </div>
-            
+
             <div class="form-group">
               <label for="password">Kata Sandi</label>
   <div class="password-wrapper">
@@ -37,7 +37,7 @@
     ></i>
     </div>
             </div>
-            
+
             <div class="form-options">
               <label class="remember-me">
                 <input type="checkbox" v-model="rememberMe">
@@ -47,18 +47,18 @@
       Lupa Kata Sandi?
     </p>
             </div>
-            
+
             <button :disabled="isLoading" type="submit" class="login-button">
   {{ isLoading ? "Loading..." : "Masuk" }}
 </button>
           </form>
-  
+
           <div class="divider">
             <span class="divider-line"></span>
             <span class="divider-text">Atau</span>
             <span class="divider-line"></span>
           </div>
-          
+
           <div class="social-login">
             <button class="social-btn google-btn" @click="loginWithGoogle">
                 <img class="social-icon" src="@/assets/google.png" alt="Google logo" />
@@ -68,19 +68,19 @@
           <p class="signup-link">Belum Punya Akun? <router-link to="/register" class="signup-link">Ayo Daftar
         </router-link></p>
         </div>
-        
+
         <div class="login-image">
           <div class="image-overlay"></div>
         </div>
       </div>
     </div>
   </template>
-  
+
   <script>
   import { auth, googleProvider } from "@/firebase";
   import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
   import { useToast } from "vue-toastification";
-  
+
   export default {
     name: 'LoginPage',
     props: ['showForgotPasswordModal'],
@@ -89,7 +89,7 @@
         email: '',
         password: '',
         rememberMe: false,
-        showPassword: false 
+        showPassword: false
       }
     },
     setup() {
@@ -102,15 +102,15 @@
           const userCredential = await signInWithEmailAndPassword(auth, this.email, this.password);
           const user = userCredential.user;
           console.log("Login success:", user);
-  
+
           if (this.rememberMe) {
             localStorage.setItem("user", JSON.stringify(user));
           }
-  
+
           this.$router.push("/dashboard");
         } catch (error) {
           const errorCode = error.code;
-  
+
           if (errorCode === "auth/user-not-found") {
             this.toast.error("Email ini belum terdaftar. Silakan daftar terlebih dahulu.");
           } else if (errorCode === "auth/wrong-password") {
@@ -120,18 +120,18 @@
           } else {
             this.toast.error("Terjadi kesalahan saat login. Silakan coba lagi.");
           }
-  
+
           console.error("Login error:", error.message);
         }
       },
-  
+
       async loginWithGoogle() {
         try {
           const result = await signInWithPopup(auth, googleProvider);
           const user = result.user;
           console.log("Google login success:", user);
           googleProvider.setCustomParameters({ prompt: 'select_account' });
-  
+
           localStorage.setItem("user", JSON.stringify(user));
           this.$router.push("/");
         } catch (error) {
@@ -141,7 +141,7 @@
       },
       async requestPrivacyPermissions() {
   try {
-   
+
     await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -161,20 +161,20 @@
     this.toast.warning("Izin privasi tidak diberikan.");
     console.warn("Permission error:", error);
   }
-},    
-  
+},
+
       openForgotPasswordModal() {
         this.$emit('open-forgot-password');
       },
-  
+
       togglePassword() {
         this.showPassword = !this.showPassword;
       }
     }
   }
   </script>
-  
-  
+
+
   <style scoped>
   .login-container {
     min-height: 100vh;
@@ -184,7 +184,7 @@
     padding: 20px;
     background-color: #f8fafc;
   }
-  
+
   .login-card {
     display: flex;
     max-width: 1000px;
@@ -194,7 +194,7 @@
     overflow: hidden;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
-  
+
   .login-form {
     flex: 1;
     padding: 48px;
@@ -202,7 +202,7 @@
     flex-direction: column;
     justify-content: center;
   }
-  
+
   .logo {
     text-align: center;
     margin-bottom: 40px;
@@ -218,7 +218,7 @@
   text-fill-color: transparent;
   transition: all 0.3s ease;
 }
-  
+
 .logo h1 {
   margin-top: 16px;
   font-size: 24px;
@@ -231,11 +231,11 @@
   font-size: 14px;
   color: #64748b;
 }
-  
+
   .form-group {
     margin-bottom: 20px;
   }
-  
+
   .form-group label {
     display: block;
     margin-bottom: 8px;
@@ -243,7 +243,7 @@
     font-weight: 500;
     color: #475569;
   }
-  
+
   .form-group input {
     width: 100%;
     padding: 12px 16px;
@@ -252,13 +252,13 @@
     font-size: 14px;
     transition: border-color 0.2s;
   }
-  
+
   .form-group input:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   }
-  
+
   .form-options {
     display: flex;
     justify-content: space-between;
@@ -266,23 +266,23 @@
     margin-bottom: 24px;
     font-size: 14px;
   }
-  
+
   .remember-me {
     display: flex;
     align-items: center;
     color: #475569;
   }
-  
+
   .remember-me input {
     margin-right: 8px;
   }
-  
+
   .forgot-password {
     color: #3b82f6;
     text-decoration: none;
     font-weight: 500;
   }
-  
+
   .forgot-password:hover {
     text-decoration: underline;
   }
@@ -300,7 +300,7 @@
   color: #64748b;
   font-size: 16px;
 }
-  
+
   .login-button {
     width: 100%;
     padding: 12px;
@@ -313,33 +313,33 @@
     cursor: pointer;
     transition: opacity 0.2s;
   }
-  
+
   .login-button:hover {
     opacity: 0.9;
   }
-  
+
   .divider {
     display: flex;
     align-items: center;
     margin: 24px 0;
   }
-  
+
   .divider-line {
     flex: 1;
     height: 1px;
     background-color: #e2e8f0;
   }
-  
+
   .divider-text {
     padding: 0 12px;
     color: #64748b;
     font-size: 14px;
   }
-  
+
   .social-login {
     margin-top: 16px;
   }
-  
+
   .social-btn {
     width: 100%;
     padding: 12px;
@@ -354,11 +354,11 @@
     gap: 8px;
     transition: background-color 0.2s;
   }
-  
+
   .social-btn:hover {
     background-color: #f8fafc;
   }
-  
+
   .google-btn {
   display: inline-flex;
   align-items: center;
@@ -397,24 +397,24 @@
 }
 
 
-  
+
   .signup-link {
     margin-top: 32px;
     text-align: center;
     font-size: 14px;
     color: #64748b;
   }
-  
+
   .signup-link a {
     color: #3b82f6;
     font-weight: 500;
     text-decoration: none;
   }
-  
+
   .signup-link a:hover {
     text-decoration: underline;
   }
-  
+
   .login-image {
   flex: 1;
   background: url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') center/cover;
@@ -430,8 +430,8 @@
   bottom: 0;
   background: linear-gradient(90deg, rgba(16, 185, 129, 0.8) 0%, rgba(6, 95, 70, 0.8) 100%);
 }
-  
-  
+
+
   @media (min-width: 768px) {
     .login-image {
       display: block;

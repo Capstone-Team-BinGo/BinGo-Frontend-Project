@@ -22,7 +22,7 @@ export default {
     return {
       articles: [],
       isLoading: false,
-      error: null
+      error: null,
     };
   },
   methods: {
@@ -32,12 +32,12 @@ export default {
       try {
         const response = await getAllArticles();
         if (response.ok) {
-          this.articles = response.data.map(article => ({
+          this.articles = response.data.map((article) => ({
             id: article.article_uid,
             title: article.judul_article.trim(),
             excerpt: this.getFirstSentence(article.description),
             date: article.created_at,
-            image: article.image_thumb.trim()
+            image: article.image_thumb.trim(),
           }));
         } else {
           throw new Error(response.message || 'Failed to fetch articles');
@@ -49,23 +49,32 @@ export default {
         this.isLoading = false;
       }
     },
+    stripHtml(html) {
+      // Membuat elemen div sementara untuk menampung konten HTML
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      // Mengambil teks saja tanpa tag HTML
+      return tmp.textContent || tmp.innerText || '';
+    },
+
     getFirstSentence(description) {
+      // Bersihkan dulu dari tag HTML
+      const cleanText = this.stripHtml(description);
       // Get first sentence or first 100 characters
-      const firstSentence = description.split('.')[0];
+      const firstSentence = cleanText.split('.')[0];
       return firstSentence.length > 100
         ? `${firstSentence.substring(0, 100)}...`
         : firstSentence;
-    }
+    },
   },
   created() {
     this.fetchArticles();
-  }
+  },
 };
 </script>
 
 <style scoped>
 .education-app {
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
   min-height: 100vh;
 }
 

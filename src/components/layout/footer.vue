@@ -8,34 +8,59 @@
             <span class="logo-text">BinGo!</span>
           </div>
           <p class="footer-text">
-            Platform edukasi pengelolaan sampah dengan pendekatan menyenangkan dan interaktif.
+            Platform edukasi pengelolaan sampah dengan pendekatan menyenangkan
+            dan interaktif.
           </p>
           <div class="dev-team" v-if="devTeam.length > 0">
-  <div class="team-members">
-    <a
-      v-for="member in devTeam"
-      :key="member.login"
-      :href="member.html_url"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="team-member"
-    >
-      <img :src="member.avatar_url" :alt="member.login" class="avatar-stack">
-      <span>{{ member.name || member.login }}</span>
-    </a>
-  </div>
-</div>
+            <div class="team-members">
+              <a
+                v-for="member in devTeam"
+                :key="member.login"
+                :href="member.html_url"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="team-member"
+              >
+                <img
+                  :src="member.avatar_url"
+                  :alt="member.login"
+                  class="avatar-stack"
+                />
+                <span>{{ member.name || member.login }}</span>
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- Quick Links -->
         <div class="links-column">
           <h3 class="footer-title">Navigasi</h3>
           <ul class="footer-links">
-            <li><router-link to="/"><i class="fas fa-chevron-right"></i>Beranda</router-link></li>
-            <li><router-link to="/about"><i class="fas fa-chevron-right"></i>Tentang Kami</router-link></li>
-            <li><router-link to="/scan"><i class="fas fa-chevron-right"></i>Scan Sampah</router-link></li>
-            <li><router-link  v-if="authStore.isAuthenticated" to="/edukasi"><i class="fas fa-chevron-right"></i>Edukasi</router-link></li>
-            <li><router-link  v-if="authStore.isAuthenticated" to="/kuiz"><i class="fas fa-chevron-right"></i>Kuiz</router-link></li>
+            <li>
+              <router-link to="/"
+                ><i class="fas fa-chevron-right"></i>Beranda</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/about"
+                ><i class="fas fa-chevron-right"></i>Tentang Kami</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/scan"
+                ><i class="fas fa-chevron-right"></i>Scan Sampah</router-link
+              >
+            </li>
+            <li>
+              <router-link v-if="authStore.isAuthenticated" to="/edukasi"
+                ><i class="fas fa-chevron-right"></i>Edukasi</router-link
+              >
+            </li>
+            <li>
+              <router-link v-if="authStore.isAuthenticated" to="/kuiz"
+                ><i class="fas fa-chevron-right"></i>Kuis</router-link
+              >
+            </li>
           </ul>
         </div>
 
@@ -45,15 +70,11 @@
           <ul class="footer-contacts">
             <li>
               <i class="fas fa-map-marker-alt"></i>
-              <span>Jl. Lingkungan Hijau No. 123, Jakarta</span>
+              <span>Surakarta, Jawa Tengah, Indonesia</span>
             </li>
             <li>
               <i class="fas fa-envelope"></i>
-              <a href="mailto:info@bingosampah.id">info@bingosampah.id</a>
-            </li>
-            <li>
-              <i class="fas fa-phone-alt"></i>
-              <a href="tel:+621234567890">+62 123 4567 890</a>
+              <a href="mailto:infobingo@gmail.com">infobingo@gmail.com</a>
             </li>
           </ul>
         </div>
@@ -62,13 +83,14 @@
       <!-- Copyright -->
       <div class="footer-bottom">
         <div class="copyright">
-          &copy; 2023 BinGo! Sampah. All rights reserved.
+          &copy; 2025 BinGo!. All rights reserved.
         </div>
         <div class="legal-links">
-          <a href="#" @click.prevent="$emit('open-privacy')">Kebijakan Privasi</a>
+          <a href="#" @click.prevent="$emit('open-privacy')"
+            >Kebijakan Privasi</a
+          >
           <span>•</span>
           <a href="#" @click.prevent="$emit('open-terms')">Syarat & Layanan</a>
-
         </div>
       </div>
     </div>
@@ -105,29 +127,40 @@ export default {
     },
     showAbout() {
       this.$emit('navigate', 'about');
-    }
+    },
   },
   data() {
     return {
       devTeam: [
         {
-          html_url: "https://github.com/vagabondzz",
-          avatar_url: "https://avatars.githubusercontent.com/u/1234567?v=4"
+          html_url: 'https://github.com/vagabondzz',
+          avatar_url: 'https://avatars.githubusercontent.com/u/1234567?v=4',
         },
         {
-          html_url: "https://github.com/janedoe",
-          avatar_url: "https://avatars.githubusercontent.com/u/2345678?v=4"
+          html_url: 'https://github.com/afrian-viky',
+          avatar_url: 'https://avatars.githubusercontent.com/u/181040952?v=4',
         },
         {
-          html_url: "https://github.com/rafi123",
-          avatar_url: "https://avatars.githubusercontent.com/u/3456789?v=4"
-        }
-      ]
+          html_url: 'https://github.com/KingRovs771',
+          avatar_url: 'https://avatars.githubusercontent.com/u/53458876?v=4',
+        },
+        {
+          html_url: 'https://github.com/kaylargya',
+          avatar_url: 'https://avatars.githubusercontent.com/u/199203465?v=4',
+        },
+        {
+          html_url: 'https://github.com/tiiyaaraa',
+          avatar_url: 'https://avatars.githubusercontent.com/u/199484189?v=4',
+        },
+        {
+          html_url: 'https://github.com/gtjenx',
+          avatar_url: 'https://avatars.githubusercontent.com/u/198513606?v=4',
+        },
+      ],
     };
-  }
-}
+  },
+};
 </script>
-
 
 <style scoped>
 /* Base Styles */
@@ -136,7 +169,6 @@ export default {
   color: #e2e8f0;
   position: relative;
   padding-top: 80px;
-  margin-top: 80px;
 }
 
 .footer-container {
@@ -168,7 +200,7 @@ export default {
   font-size: 24px;
   font-weight: 700;
   color: #ffffff;
-  background: linear-gradient(90deg, #10B981, #065F46);
+  background: linear-gradient(90deg, #10b981, #065f46);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -182,6 +214,7 @@ export default {
 
 .dev-team {
   margin-top: 20px;
+  margin-left: 20px;
 }
 
 .avatar-stack {
@@ -195,7 +228,7 @@ export default {
   position: relative;
   z-index: 1;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin-right: 5px;
 }
 
@@ -204,7 +237,6 @@ export default {
   z-index: 2;
   border-color: #10b981;
 }
-
 
 .avatar-stack:hover::after {
   opacity: 1;
@@ -242,7 +274,7 @@ export default {
   bottom: 0;
   width: 40px;
   height: 2px;
-  background: linear-gradient(90deg, #10B981, #065F46);
+  background: linear-gradient(90deg, #10b981, #065f46);
 }
 
 .footer-links {
@@ -265,7 +297,7 @@ export default {
 }
 
 .footer-links li a:hover {
-  color: #42835A;
+  color: #42835a;
   transform: translateX(5px);
 }
 
@@ -346,7 +378,7 @@ export default {
 }
 
 .legal-links a:hover {
-  color: #42835A;
+  color: #42835a;
 }
 
 .legal-links span {

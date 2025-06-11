@@ -13,7 +13,7 @@
             <div class="logo-icon">
              <i class="fas fa-lock"></i>
             </div>
-            <h1>Kebijakan Privasi <span>Bingo</span></h1>
+            <h1>Kebijakan Privasi <span>BinGo!</span></h1>
             <p>Terakhir diperbarui: 1 Juni 2025</p>
           </div>
 

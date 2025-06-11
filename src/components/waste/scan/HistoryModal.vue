@@ -116,32 +116,34 @@ h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
 .image-preview {
   max-width: 100%;
   max-height: 300px;
   border-radius: 12px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .waste-icon {
   font-size: 4rem;
   color: #4CAF50;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .waste-name {
   font-size: 1.8rem;
   font-weight: 700;
   color: #333;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
+  margin-top: 0;
   text-align: center;
 }
 
 .waste-category {
-  margin-bottom: 1.5rem;
+  margin: 10px auto;
 }
 
 .category-badge {
@@ -157,7 +159,7 @@ h2 {
 .waste-description {
   text-align: center;
   max-width: 600px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   color: #555;
   font-size: 1.1rem;
   line-height: 1.6;
@@ -209,15 +211,15 @@ h2 {
   .modal-content {
     padding: 1.5rem;
   }
-  
+
   h2 {
     font-size: 1.5rem;
   }
-  
+
   .waste-name {
     font-size: 1.5rem;
   }
-  
+
   .image-preview {
     max-height: 250px;
   }

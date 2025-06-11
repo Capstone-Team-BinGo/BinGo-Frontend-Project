@@ -4,9 +4,9 @@
       <div class="login-form">
         <!-- Header -->
         <div class="logo">
-          <span class="logo-text">Bingo</span>
+          <span class="logo-text">BinGo!</span>
           <h1>Buat Akun Baru</h1>
-          <p>Mulai kelola sampah dengan lebih bijak bersama Bingo</p>
+          <p>Mulai kelola sampah dengan lebih bijak bersama BinGo!</p>
         </div>
 
         <!-- Google Sign Up -->
@@ -90,7 +90,7 @@
 
         <p class="signup-link">Sudah punya akun? <router-link to="/login">Masuk Disini</router-link></p>
       </div>
-      
+
       <div class="login-image">
         <div class="image-overlay"></div>
       </div>
@@ -199,7 +199,7 @@ export default {
   text-fill-color: transparent;
   transition: all 0.3s ease;
 }
-  
+
 
 .logo h1 {
   margin-top: 16px;

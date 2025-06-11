@@ -14,7 +14,7 @@
       <p class="card-excerpt">{{ stripHtml(article.excerpt) }}</p>
       <div class="card-footer">
         <button class="read-more-btn">
-          Read More <i class="fas fa-arrow-right"></i>
+          Selengkapnya <i class="fas fa-arrow-right"></i>
         </button>
       </div>
     </div>

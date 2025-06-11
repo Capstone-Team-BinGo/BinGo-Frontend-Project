@@ -5,7 +5,7 @@
       <div class="waste-icon">
         <i :class="analysisResult.wasteIcon"></i>
       </div>
-      <h3 class="waste-name">{{ analysisResult.itemName }}</h3>
+      <h4 class="waste-name">{{ analysisResult.itemName }}</h4>
       <div class="waste-category">
         <span class="category-badge">{{ analysisResult.type }}</span>
       </div>
@@ -65,11 +65,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
 }
 
 .waste-icon {
   font-size: 4rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   color: #4CAF50;
 }
 
@@ -77,12 +78,13 @@ export default {
   font-size: 2rem;
   font-weight: 700;
   color: #333;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
   text-align: center;
+  margin-top: 0;
 }
 
 .waste-category {
-  margin-bottom: 1.5rem;
+  margin: 10px auto;
 }
 
 .category-badge {
@@ -98,7 +100,7 @@ export default {
 .waste-description {
   text-align: center;
   max-width: 700px;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
   color: #555;
   font-size: 1.1rem;
   line-height: 1.6;
@@ -151,11 +153,11 @@ export default {
   .results-section {
     padding: 1.5rem;
   }
-  
+
   .waste-name {
     font-size: 1.5rem;
   }
-  
+
   .waste-description {
     font-size: 1rem;
   }

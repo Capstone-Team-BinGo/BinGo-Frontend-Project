@@ -492,12 +492,11 @@ skipQuestion() {
   width: 200px;
   height: 200px;
   margin: 0 auto 20px;
+  align-content: center;
 }
 
 .trash-image {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
   border-radius: 12px;
   z-index: 1;
   position: relative;

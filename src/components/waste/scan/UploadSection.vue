@@ -39,10 +39,15 @@
       </button>
     </div>
 
-    <div class="loading" :style="{ display: isLoading ? 'block' : 'none' }">
-      <div class="spinner"></div>
-      <p>Sedang menganalisis gambar...</p>
+  <div class="loading" :style="{ display: isLoading ? 'block' : 'none' }">
+    <div class="spinner-container">
+      <div class="spinner">
+        <div class="spinner-inner"></div>
+      </div>
     </div>
+    <p class="loading-text">Sedang menganalisis gambar...</p>
+    <p class="loading-subtext">Proses mungkin memakan waktu beberapa detik</p>
+  </div>
 
     <CameraModal
       v-if="showCameraModal"
@@ -114,7 +119,7 @@ export default {
 
       try {
         const response = await axios.post(
-          'http://localhost:5000/predict',
+          'https://whoiskywi-bingo.hf.space/predict',
           formData,
           { headers: { 'Content-Type': 'multipart/form-data' } }
         );
@@ -189,7 +194,7 @@ export default {
 }
 
 .upload-btn:hover {
-  border-color: #4caf50;
+  border-color: #082E16;
   background-color: #f5f5f5;
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -201,7 +206,7 @@ export default {
 
 .upload-btn i {
   font-size: 3.5rem;
-  color: #4caf50;
+  color: #1F7D53;
   margin-bottom: 1.5rem;
   transition: all 0.3s;
 }
@@ -310,21 +315,87 @@ export default {
   display: none;
   text-align: center;
   margin: 2rem 0;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background-color: rgba(249, 249, 249, 0.9);
+  border: 1px solid rgba(76, 175, 80, 0.2);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.spinner-container {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1rem;
 }
 
 .spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  border: 3px solid rgba(76, 175, 80, 0.1);
   border-radius: 50%;
-  border-top: 4px solid #4caf50;
-  width: 50px;
-  height: 50px;
+  border-top: 3px solid #4CAF50;
   animation: spin 1s linear infinite;
-  margin: 0 auto 1.5rem;
+  position: relative;
 }
 
-.loading p {
-  color: #555;
+.spinner-inner {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  border-top: 2px solid #2E7D32;
+  animation: spinReverse 1.5s linear infinite;
+}
+
+.loading-text {
+  color: #333;
   font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.loading-subtext {
+  color: #666;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-720deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .loading {
+    padding: 1.2rem;
+  }
+
+  .spinner-container {
+    width: 50px;
+    height: 50px;
+  }
+
+  .loading-text {
+    font-size: 1rem;
+  }
+
+  .loading-subtext {
+    font-size: 0.8rem;
+  }
 }
 
 @media (max-width: 768px) {

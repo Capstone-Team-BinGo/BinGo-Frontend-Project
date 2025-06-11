@@ -15,7 +15,6 @@ export function getAccessToken() {
 // Simpan token ke localStorage
 export function putAccessToken(token) {
   try {
-    console.log("Menyimpan token:", token); // Debugging
     localStorage.setItem(ACCESS_TOKEN_KEY, token);
     return true;
   } catch (err) {
@@ -61,7 +60,6 @@ export function checkAdminAuthenticated(pageComponent) {
   return pageComponent;
 }
 
-// Fungsi untuk menyimpan data user
 export const putUserData = (userData) => {
   localStorage.setItem('userData', JSON.stringify(userData));
 };

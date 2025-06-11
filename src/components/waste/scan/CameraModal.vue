@@ -5,7 +5,12 @@
       <h2>Ambil Foto</h2>
 
       <div class="camera-container">
-        <video ref="videoElement" autoplay playsinline class="camera-preview"></video>
+        <video
+          ref="videoElement"
+          autoplay
+          playsinline
+          class="camera-preview"
+        ></video>
         <canvas ref="canvasElement" style="display: none"></canvas>
 
         <div class="camera-controls">
@@ -26,7 +31,7 @@ export default {
   data() {
     return {
       videoStream: null,
-      currentFacingMode: 'environment'
+      currentFacingMode: 'environment',
     };
   },
   mounted() {
@@ -42,11 +47,13 @@ export default {
           video: {
             facingMode: this.currentFacingMode,
             width: { ideal: 1280 },
-            height: { ideal: 720 }
-          }
+            height: { ideal: 720 },
+          },
         };
 
-        this.videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+        this.videoStream = await navigator.mediaDevices.getUserMedia(
+          constraints
+        );
         this.$refs.videoElement.srcObject = this.videoStream;
       } catch (error) {
         console.error('Error accessing camera:', error);
@@ -56,7 +63,7 @@ export default {
     },
     stopCamera() {
       if (this.videoStream) {
-        this.videoStream.getTracks().forEach(track => track.stop());
+        this.videoStream.getTracks().forEach((track) => track.stop());
       }
     },
     takePicture() {
@@ -69,27 +76,32 @@ export default {
       const context = canvas.getContext('2d');
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      canvas.toBlob((blob) => {
-        const uploadedFile = new File([blob], 'camera-photo.jpg', {
-          type: 'image/jpeg'
-        });
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.$emit('picture-taken', {
-            imagePreview: e.target.result,
-            uploadedFile
+      canvas.toBlob(
+        (blob) => {
+          const uploadedFile = new File([blob], 'camera-photo.jpg', {
+            type: 'image/jpeg',
           });
-        };
-        reader.readAsDataURL(blob);
-      }, 'image/jpeg', 0.9);
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.$emit('picture-taken', {
+              imagePreview: e.target.result,
+              uploadedFile,
+            });
+          };
+          reader.readAsDataURL(blob);
+        },
+        'image/jpeg',
+        0.9
+      );
     },
     async switchCamera() {
-      this.currentFacingMode = this.currentFacingMode === 'user' ? 'environment' : 'user';
+      this.currentFacingMode =
+        this.currentFacingMode === 'user' ? 'environment' : 'user';
       this.stopCamera();
       await this.startCamera();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -191,18 +203,19 @@ h2 {
 }
 
 .switch-btn {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
+  background: white;
+  border: 5px solid #f5f5f5;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  color: white;
+  font-size: 28px;
+  color: #2e7d32;
   transition: all 0.3s;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
 }
 
@@ -214,21 +227,21 @@ h2 {
   .modal-content {
     padding: 1.5rem;
   }
-  
+
   h2 {
     font-size: 1.5rem;
   }
-  
+
   .capture-btn {
     width: 60px;
     height: 60px;
     font-size: 24px;
   }
-  
+
   .switch-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
   }
 }
 </style>

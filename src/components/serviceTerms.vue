@@ -13,14 +13,14 @@
             <div class="logo-icon">
              <i class="fas fa-shield-alt"></i>
             </div>
-            <h1>Syarat Layanan <span>Bingo</span></h1>
+            <h1>Syarat Layanan <span>BinGo!</span></h1>
             <p>Terakhir diperbarui: 1 Juni 2025</p>
           </div>
 
           <div class="terms-content">
             <div class="terms-section">
               <h2><span class="section-number">1</span>Penggunaan Layanan</h2>
-              <p>Dengan mengakses atau menggunakan layanan Bingo, Anda menyetujui untuk terikat oleh Syarat Layanan ini. Jika Anda tidak setuju dengan syarat ini, mohon untuk tidak menggunakan layanan kami.</p>
+              <p>Dengan mengakses atau menggunakan layanan BinGo!, Anda menyetujui untuk terikat oleh Syarat Layanan ini. Jika Anda tidak setuju dengan syarat ini, mohon untuk tidak menggunakan layanan kami.</p>
             </div>
 
             <div class="terms-section">
@@ -45,7 +45,7 @@
 
             <div class="terms-section">
               <h2><span class="section-number">6</span>Pembatasan Tanggung Jawab</h2>
-              <p>Dalam batas yang diizinkan hukum, Bingo tidak bertanggung jawab atas kerugian tidak langsung, insidental, khusus, atau konsekuensial yang timbul dari penggunaan layanan kami.</p>
+              <p>Dalam batas yang diizinkan hukum, BinGo! tidak bertanggung jawab atas kerugian tidak langsung, insidental, khusus, atau konsekuensial yang timbul dari penggunaan layanan kami.</p>
             </div>
 
             <div class="terms-section">

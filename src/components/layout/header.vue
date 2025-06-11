@@ -67,7 +67,6 @@
       <div class="auth-controls">
         <!-- User Controls -->
         <template v-if="!isAdminPage">
-
           <div v-if="authStore.isAuthenticated" class="profile-wrapper">
             <div class="profile-display">
               <i class="fas fa-user-circle"></i>
@@ -88,7 +87,7 @@
               <i class="fas fa-user-circle"></i>
               <span class="username">{{ adminName }}</span>
             </div>
-            <button @click="logoutAdmin" class="logout-button">Logout</button>
+            <button @click="logoutAdmin" class="logout-button">Keluar</button>
           </div>
         </template>
       </div>
@@ -157,7 +156,6 @@
 
         <!-- Common Mobile Auth Section -->
         <div class="mobile-auth">
-
           <template v-if="!isAdminPage && authStore.isAuthenticated">
             <div class="profile-mobile">
               <i class="fas fa-user-circle fa-lg"></i>
@@ -176,7 +174,7 @@
               <span class="username">{{ adminName }}</span>
             </div>
             <button class="mobile-logout-btn" @click="logoutAdmin">
-              <i class="fas fa-sign-out-alt"></i> Logout
+              <i class="fas fa-sign-out-alt"></i> Keluar
             </button>
           </template>
         </div>
@@ -204,6 +202,7 @@ export default {
 
     async function logout() {
       await authStore.logout();
+      window.location.href = '/';
     }
 
     return { authStore, loginGoogle, logout };

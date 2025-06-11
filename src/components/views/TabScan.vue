@@ -13,15 +13,15 @@
           <div class="highlight-content">
             <h3>Pindai Sampah Anda dalam 3 Langkah Mudah</h3>
             <div class="steps">
-              <div class="step">
+              <div class="step" data-aos="zoom-in-up" data-aos-duration="1000">
                 <div class="step-icon">1</div>
                 <p>Unggah atau ambil foto</p>
               </div>
-              <div class="step">
+              <div class="step" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="300">
                 <div class="step-icon">2</div>
                 <p>Biarkan AI kami menganalisis</p>
               </div>
-              <div class="step">
+              <div class="step" data-aos="zoom-in-up" data-aos-duration="1000" data-aos-delay="600">
                 <div class="step-icon">3</div>
                 <p>Dapatkan petunjuk pembuangan</p>
               </div>
@@ -45,21 +45,6 @@
             class="results-section"
           />
         </transition>
-
-        <transition name="fade">
-          <HistorySection
-            v-if="analysisHistory.length > 0"
-            :analysisHistory="analysisHistory"
-            @show-history="showHistoryItem"
-            class="history-section"
-          />
-        </transition>
-
-        <HistoryModal
-          v-if="isModalOpen"
-          :selectedHistoryItem="selectedHistoryItem"
-          @close="closeModal"
-        />
       </main>
     </div>
   </div>
@@ -68,8 +53,6 @@
 <script>
 import UploadSection from '../waste/scan/UploadSection.vue';
 import ResultsSection from '../waste/scan/ResultsSection.vue';
-import HistorySection from '../waste/scan/HistorySection.vue';
-import HistoryModal from '../waste/scan/HistoryModal.vue';
 import { useToast } from 'vue-toastification';
 
 export default {
@@ -77,17 +60,12 @@ export default {
   components: {
     UploadSection,
     ResultsSection,
-    HistorySection,
-    HistoryModal,
   },
   data() {
     return {
       imagePreview: null,
       uploadedFile: null,
       analysisResult: null,
-      analysisHistory: [],
-      isModalOpen: false,
-      selectedHistoryItem: null,
       isLoading: false,
     };
   },
@@ -102,25 +80,12 @@ export default {
     },
     handleImageAnalyzed(result) {
       this.analysisResult = result;
-      this.analysisHistory.unshift({
-        image: this.imagePreview,
-        result: { ...result },
-        timestamp: new Date(),
-      });
       this.toast.success('Analisis berhasil!', {
         timeout: 3000,
         closeOnClick: true,
         pauseOnHover: true,
         position: 'top-right',
       });
-    },
-    showHistoryItem(item) {
-      this.selectedHistoryItem = item;
-      this.isModalOpen = true;
-    },
-    closeModal() {
-      this.isModalOpen = false;
-      this.selectedHistoryItem = null;
     },
     handleLoadingStarted() {
       this.isLoading = true;
@@ -136,9 +101,6 @@ export default {
         pauseOnHover: true,
         position: 'top-right',
       });
-    },
-    formatDate(date) {
-      return new Date(date).toLocaleString();
     },
     getIconByKategori(kategori) {
       switch (kategori.toLowerCase()) {
@@ -159,7 +121,6 @@ export default {
 
 <style scoped>
 .scan-app {
-  background: linear-gradient(135deg, #f0f9f0 0%, #e6f4e6 100%);
   min-height: 100vh;
   font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 }
@@ -178,7 +139,7 @@ export default {
 
 .app-title {
   font-size: 2.8rem;
-  color: #2e7d32;
+  color: #1F7D53;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -204,7 +165,7 @@ export default {
 }
 
 .feature-highlight {
-  background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+  background: linear-gradient(135deg, #42835A 0%, #5CA375 100%);
   border-radius: 16px;
   padding: 2rem;
   color: white;
@@ -266,13 +227,6 @@ export default {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-.history-section {
-  background: white;
-  border-radius: 16px;
-  padding: 2.5rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-}
-
 /* Animations */
 .fade-slide-enter-active,
 .fade-slide-leave-active {
@@ -283,16 +237,6 @@ export default {
 .fade-slide-leave-to {
   opacity: 0;
   transform: translateY(20px);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 
 @media (max-width: 768px) {
@@ -311,36 +255,8 @@ export default {
   }
 
   .upload-section,
-  .results-section,
-  .history-section {
+  .results-section {
     padding: 1.5rem;
   }
-}
-</style>
-
-<style>
-/* Global message styles */
-.el-message.custom-message {
-  top: 100px;
-  right: 20px;
-  left: auto !important;
-  transform: none !important;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  padding: 1rem 1.5rem;
-  font-weight: 500;
-  font-size: 1rem;
-}
-
-.el-message--success {
-  background-color: #f0f9eb;
-  border-color: #e1f3d8;
-  color: #2e7d32;
-}
-
-.el-message--error {
-  background-color: #fef0f0;
-  border-color: #fde2e2;
-  color: #f56c6c;
 }
 </style>

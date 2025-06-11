@@ -25,7 +25,7 @@
             <span class="card-date">{{ formatDate(article.created_at) }}</span>
           </div>
           <h3 class="card-title">{{ article.judul_article }}</h3>
-          <p class="card-excerpt">{{ getFirstSentence(article.description) }}...</p>
+          <p class="card-excerpt">{{ stripHtml(article.description).substring(0, 100) }}...</p>
           <div class="card-actions">
             <button class="btn-edit" @click.stop="openEditModal(article)">Edit</button>
             <button class="btn-delete" @click.stop="confirmDelete(article.article_uid)">Hapus</button>

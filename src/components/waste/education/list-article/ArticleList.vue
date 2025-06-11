@@ -2,7 +2,7 @@
   <section class="article-grid">
     <div v-if="isLoading" class="empty-state">
       <i class="fas fa-spinner fa-spin"></i>
-      <h3>Loading articles...</h3>
+      <h3>Artikel sedang dimuat...</h3>
     </div>
     <div v-else-if="error" class="empty-state">
       <i class="fas fa-exclamation-triangle"></i>

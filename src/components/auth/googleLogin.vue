@@ -13,7 +13,7 @@
             <div class="logo-icon">
              <i class="fas fa-user"></i>
             </div>
-            <h1>Selamat Datang di <span>Bingo</span></h1>
+            <h1>Selamat Datang di <span>BinGo!</span></h1>
             <p>Manajemen sampah cerdas dimulai di sini</p>
           </div>
 

@@ -10,8 +10,6 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useAuthStore } from './stores/auth';
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -20,7 +18,6 @@ pinia.use(piniaPluginPersistedstate);
 app.use(createPinia())
 app.use(Toast);
 app.use(pinia);
-app.use(ElementPlus);
 
 const authStore = useAuthStore();
 
