@@ -42,11 +42,6 @@
               >
             </li>
             <li>
-              <router-link to="/about"
-                ><i class="fas fa-chevron-right"></i>Tentang Kami</router-link
-              >
-            </li>
-            <li>
               <router-link to="/scan"
                 ><i class="fas fa-chevron-right"></i>Scan Sampah</router-link
               >
@@ -57,8 +52,13 @@
               >
             </li>
             <li>
-              <router-link v-if="authStore.isAuthenticated" to="/kuiz"
+              <router-link v-if="authStore.isAuthenticated" to="/kuis"
                 ><i class="fas fa-chevron-right"></i>Kuis</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/about"
+                ><i class="fas fa-chevron-right"></i>Tentang Kami</router-link
               >
             </li>
           </ul>
@@ -82,9 +82,7 @@
 
       <!-- Copyright -->
       <div class="footer-bottom">
-        <div class="copyright">
-          &copy; 2025 BinGo!. All rights reserved.
-        </div>
+        <div class="copyright">&copy; 2025 BinGo!. All rights reserved.</div>
         <div class="legal-links">
           <a href="#" @click.prevent="$emit('open-privacy')"
             >Kebijakan Privasi</a

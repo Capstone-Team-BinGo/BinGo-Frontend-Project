@@ -174,7 +174,7 @@
             bio: 'Tiga Serangkai University',
             image: require ('@/assets/risky.jpeg'),
             social: {
-              linkedin: '#'
+              linkedin: 'https://www.linkedin.com/in/rzbudi/'
             }
           },
         ]
