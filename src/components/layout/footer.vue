@@ -47,6 +47,11 @@
               >
             </li>
             <li>
+              <router-link to="/about"
+                ><i class="fas fa-chevron-right"></i>Tentang Kami</router-link
+              >
+            </li>
+            <li>
               <router-link v-if="authStore.isAuthenticated" to="/edukasi"
                 ><i class="fas fa-chevron-right"></i>Edukasi</router-link
               >
@@ -54,11 +59,6 @@
             <li>
               <router-link v-if="authStore.isAuthenticated" to="/kuis"
                 ><i class="fas fa-chevron-right"></i>Kuis</router-link
-              >
-            </li>
-            <li>
-              <router-link to="/about"
-                ><i class="fas fa-chevron-right"></i>Tentang Kami</router-link
               >
             </li>
           </ul>
