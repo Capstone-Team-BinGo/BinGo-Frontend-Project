@@ -397,7 +397,6 @@ skipQuestion() {
   padding: 20px;
   position: relative;
   overflow: hidden;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -438,7 +437,6 @@ skipQuestion() {
   border-radius: 20px;
   padding: 25px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -603,7 +601,7 @@ skipQuestion() {
 .quiz-navigation {
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
+  margin-top: 30px;
 }
 
 .nav-btn {
@@ -706,7 +704,7 @@ skipQuestion() {
   border-radius: 50%;
   background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   color: white;
