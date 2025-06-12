@@ -7,7 +7,7 @@ export function getAccessToken() {
     if (!token || token === 'null' || token === 'undefined') return null;
     return token;
   } catch (err) {
-    console.error('getAccessToken error:', err);
+    //console.error('getAccessToken error:', err);
     return null;
   }
 }
