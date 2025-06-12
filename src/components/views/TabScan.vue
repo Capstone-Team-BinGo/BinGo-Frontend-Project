@@ -35,8 +35,6 @@
           @loading-started="handleLoadingStarted"
           @loading-finished="handleLoadingFinished"
           @analysis-failed="handleAnalysisFailed"
-                @limit-reached="handleLimitReached"
-      @open-login="handleOpenLogin"
           class="upload-section"
         />
 
@@ -47,26 +45,6 @@
             class="results-section"
           />
         </transition>
-
-        <transition name="fade">
-      <div v-if="showLoginModal" class="modal-overlay">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Login Diperlukan</h3>
-            <button class="close-btn" @click="showLoginModal = false">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Login untuk melanjutkan scan tanpa batas!</p>
-            <!-- Isi dengan form login atau komponen login -->
-            <button class="login-btn" @click="redirectToLogin">
-              Pergi ke Halaman Beranda untuk Login
-            </button>
-          </div>
-        </div>
-      </div>
-    </transition>
       </main>
     </div>
   </div>
@@ -89,7 +67,6 @@ export default {
       uploadedFile: null,
       analysisResult: null,
       isLoading: false,
-            showLoginModal: false,
     };
   },
   setup() {
@@ -136,23 +113,6 @@ export default {
         default:
           return 'fas fa-question-circle';
       }
-    },
-        handleLimitReached() {
-      this.toast.warning('Anda telah mencapai batas maksimal scan tanpa login', {
-        timeout: 5000,
-        closeOnClick: true,
-        pauseOnHover: true,
-        position: 'top-right',
-      });
-    },
-
-    handleOpenLogin() {
-      this.showLoginModal = true;
-    },
-
-    redirectToLogin() {
-      this.$router.push('/');
-      this.showLoginModal = false;
     },
   },
 };
@@ -279,80 +239,6 @@ export default {
   transform: translateY(20px);
 }
 
-  .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 500px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: modalFadeIn 0.3s ease-out;
-}
-
-.modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: #082E16;
-  font-size: 1.3rem;
-}
-
-.modal-body {
-  padding: 2rem 1.5rem;
-  text-align: center;
-}
-
-.modal-body p {
-  margin-bottom: 1.5rem;
-  color: #4B5563;
-  font-size: 1.1rem;
-}
-
-.login-btn {
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
-  color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-.login-btn:hover {
-  background: linear-gradient(135deg, #3d8b40, #1b5e20);
-}
-
-.close-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: #666;
-  font-size: 1.2rem;
-}
-
 @media (max-width: 768px) {
   .app-title {
     font-size: 2.2rem;
@@ -372,28 +258,5 @@ export default {
   .results-section {
     padding: 1.5rem;
   }
-
-
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
 }
 </style>

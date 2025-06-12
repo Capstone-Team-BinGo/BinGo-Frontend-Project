@@ -1,11 +1,7 @@
 <template>
   <section class="upload-section">
     <div class="upload-options">
-      <div
-        class="upload-btn"
-        @click="triggerFileInput"
-        aria-label="Upload gambar"
-      >
+      <div class="upload-btn" @click="triggerFileInput" aria-label="Upload gambar">
         <i class="fa-solid fa-cloud-arrow-up"></i>
         <span>Unggah Gambar</span>
         <input
@@ -43,46 +39,21 @@
       </button>
     </div>
 
-    <div class="loading" :style="{ display: isLoading ? 'block' : 'none' }">
-      <div class="spinner-container">
-        <div class="spinner">
-          <div class="spinner-inner"></div>
-        </div>
+  <div class="loading" :style="{ display: isLoading ? 'block' : 'none' }">
+    <div class="spinner-container">
+      <div class="spinner">
+        <div class="spinner-inner"></div>
       </div>
-      <p class="loading-text">Sedang menganalisis gambar...</p>
-      <p class="loading-subtext">Proses mungkin memakan waktu beberapa detik</p>
     </div>
+    <p class="loading-text">Sedang menganalisis gambar...</p>
+    <p class="loading-subtext">Proses mungkin memakan waktu beberapa detik</p>
+  </div>
 
     <CameraModal
       v-if="showCameraModal"
       @close="closeCamera"
       @picture-taken="handlePictureTaken"
     />
-
-        <!-- Tambahkan modal untuk limit dan login -->
-    <div v-if="showLimitModal" class="limit-modal-overlay">
-      <div class="limit-modal">
-        <div class="modal-header">
-          <h3>Limit Penggunaan</h3>
-          <button class="close-btn" @click="showLimitModal = false">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        <div class="modal-body">
-          <i class="fas fa-exclamation-triangle warning-icon"></i>
-          <p>Anda telah mencapai batas maksimal 3 scan dalam 24 jam tanpa login.</p>
-          <p>Login untuk mendapatkan akses penuh tanpa batas!</p>
-        </div>
-        <div class="modal-footer">
-          <button class="cancel-btn" @click="showLimitModal = false">
-            Nanti Saja
-          </button>
-          <button class="login-btn" @click="triggerLogin">
-            Login Sekarang
-          </button>
-        </div>
-      </div>
-    </div>
   </section>
 </template>
 
@@ -98,7 +69,6 @@ export default {
       uploadedFile: null,
       showCameraModal: false,
       isLoading: false,
-      showLimitModal: false,
     };
   },
   methods: {
@@ -138,50 +108,22 @@ export default {
       this.$refs.fileInput.value = ''; // Reset file input
       this.$emit('preview-cleared');
     },
-getAccessToken() {
-  try {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const accessToken = user?.stsTokenManager?.accessToken || null;
-
-    return accessToken;
-  } catch (e) {
-    //console.warn('Gagal membaca accessToken dari localStorage', e);
-    return null;
-  }
-},
-
     async analyzeImage() {
       if (!this.uploadedFile) return;
 
-      this.isLoading = true;
-      this.$emit('loading-started');
+      this.isLoading = true; // Set loading state
+      this.$emit('loading-started'); // Beri tahu parent komponen
 
       const formData = new FormData();
       formData.append('file', this.uploadedFile);
 
-      const accessToken = this.getAccessToken();
-      let uid = null;
-
-      try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        uid = user?.uid || null;
-      } catch (e) {
-        // Gagal membaca UID dari localStorage
-      }
-
       try {
         const response = await axios.post(
-          'http://103.67.78.27:5000/predict',
+          'https://whoiskywi-bingo.hf.space/predict',
           formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-              ...(uid && { 'User-Uid': uid }),
-            },
-          }
+          { headers: { 'Content-Type': 'multipart/form-data' } }
         );
-
+        // Format hasil sesuai dengan struktur yang diharapkan
         const result = {
           itemName: response.data.Sampah,
           type: response.data.Kategori,
@@ -193,25 +135,12 @@ getAccessToken() {
         this.$emit('image-analyzed', result);
       } catch (error) {
         console.error('Error analyzing image:', error);
-
-        // Tangani error limit
-        if (error.response && error.response.data.error === "Anonymous uploads limited to 3 per 24 hours.") {
-          this.showLimitModal = true;
-          this.$emit('limit-reached');
-        } else {
-          this.$emit('analysis-failed', error);
-        }
+        this.$emit('analysis-failed', error); // Event baru untuk error handling
       } finally {
-        this.isLoading = false;
-        this.$emit('loading-finished');
+        this.isLoading = false; // Matikan loading
+        this.$emit('loading-finished'); // Beri tahu parent komponen
       }
     },
-
-    triggerLogin() {
-      this.showLimitModal = false;
-      this.$emit('open-login'); // Sama dengan event di home.vue
-    },
-
   },
 };
 </script>
@@ -259,13 +188,13 @@ getAccessToken() {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #4caf50, #2e7d32);
+  background: linear-gradient(90deg, #4CAF50, #2E7D32);
   transition: all 0.3s;
   transform: scaleX(0);
 }
 
 .upload-btn:hover {
-  border-color: #082e16;
+  border-color: #082E16;
   background-color: #f5f5f5;
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -277,7 +206,7 @@ getAccessToken() {
 
 .upload-btn i {
   font-size: 3.5rem;
-  color: #1f7d53;
+  color: #1F7D53;
   margin-bottom: 1.5rem;
   transition: all 0.3s;
 }
@@ -302,14 +231,8 @@ getAccessToken() {
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .preview-header {
@@ -359,7 +282,7 @@ getAccessToken() {
 }
 
 .analyze-btn {
-  background: linear-gradient(135deg, #4caf50, #2e7d32);
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -411,7 +334,7 @@ getAccessToken() {
   height: 100%;
   border: 3px solid rgba(76, 175, 80, 0.1);
   border-radius: 50%;
-  border-top: 3px solid #4caf50;
+  border-top: 3px solid #4CAF50;
   animation: spin 1s linear infinite;
   position: relative;
 }
@@ -424,7 +347,7 @@ getAccessToken() {
   bottom: 10px;
   border: 2px solid transparent;
   border-radius: 50%;
-  border-top: 2px solid #2e7d32;
+  border-top: 2px solid #2E7D32;
   animation: spinReverse 1.5s linear infinite;
 }
 
@@ -442,32 +365,18 @@ getAccessToken() {
 }
 
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes spinReverse {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-720deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-720deg); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 768px) {
@@ -520,108 +429,6 @@ getAccessToken() {
   .analyze-btn {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
-  }
-}
-
-.limit-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.limit-modal {
-  background-color: white;
-  border-radius: 16px;
-  width: 90%;
-  max-width: 500px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: modalFadeIn 0.3s ease-out;
-}
-
-.modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.modal-header h3 {
-  margin: 0;
-  color: #082E16;
-  font-size: 1.3rem;
-}
-
-.modal-body {
-  padding: 2rem 1.5rem;
-  text-align: center;
-}
-
-.warning-icon {
-  font-size: 3rem;
-  color: #F59E0B;
-  margin-bottom: 1.5rem;
-}
-
-.modal-body p {
-  margin: 0.5rem 0;
-  color: #4B5563;
-  line-height: 1.6;
-}
-
-.modal-footer {
-  display: flex;
-  padding: 1rem;
-  border-top: 1px solid #eee;
-}
-
-.cancel-btn, .login-btn {
-  flex: 1;
-  padding: 0.8rem;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.cancel-btn {
-  background: #F3F4F6;
-  color: #4B5563;
-  border: none;
-  margin-right: 0.5rem;
-}
-
-.cancel-btn:hover {
-  background: #E5E7EB;
-}
-
-.login-btn {
-  background: #082E16;
-  color: white;
-  border: none;
-  margin-left: 0.5rem;
-}
-
-.login-btn:hover {
-  background: #065F46;
-}
-
-@keyframes modalFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 </style>
