@@ -35,6 +35,8 @@
           @loading-started="handleLoadingStarted"
           @loading-finished="handleLoadingFinished"
           @analysis-failed="handleAnalysisFailed"
+          @rate-limit-hit="handleRateLimitHit"
+          @reset-analysis="resetAnalysis"
           class="upload-section"
         />
 
@@ -45,6 +47,24 @@
             class="results-section"
           />
         </transition>
+
+        <!-- History Section -->
+        <transition name="fade-slide">
+          <HistorySection
+            :userUid="userUid"
+            @show-history-detail="showHistoryModal"
+            @history-deleted="onHistoryDeleted"
+            ref="historySection"
+            class="history-section-component"
+          />
+        </transition>
+
+        <!-- History Detail Modal -->
+        <HistoryModal
+          v-if="showModal && selectedHistoryItem"
+          :historyItem="selectedHistoryItem"
+          @close="closeHistoryModal"
+        />
       </main>
     </div>
   </div>
@@ -53,6 +73,8 @@
 <script>
 import UploadSection from '../waste/scan/UploadSection.vue';
 import ResultsSection from '../waste/scan/ResultsSection.vue';
+import HistorySection from '../waste/scan/HistorySection.vue';
+import HistoryModal from '../waste/scan/HistoryModal.vue';
 import { useToast } from 'vue-toastification';
 
 export default {
@@ -60,6 +82,8 @@ export default {
   components: {
     UploadSection,
     ResultsSection,
+    HistorySection,
+    HistoryModal,
   },
   data() {
     return {
@@ -67,17 +91,41 @@ export default {
       uploadedFile: null,
       analysisResult: null,
       isLoading: false,
+      showModal: false,
+      selectedHistoryItem: null,
+      userUid: null,
     };
   },
   setup() {
     const toast = useToast();
     return { toast };
   },
+  mounted() {
+    this.getUserUid();
+  },
   methods: {
+    getUserUid() {
+      let userUid = null;
+      try {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          userUid = parsedUser.uid;
+        }
+
+      } catch (error) {
+        console.warn('Failed to get user data:', error);
+        userUid = null;
+      }
+
+      this.userUid = userUid;
+    },
+
     handleFileUploaded({ imagePreview, uploadedFile }) {
       this.imagePreview = imagePreview;
       this.uploadedFile = uploadedFile;
     },
+
     handleImageAnalyzed(result) {
       this.analysisResult = result;
       this.toast.success('Analisis berhasil!', {
@@ -86,13 +134,22 @@ export default {
         pauseOnHover: true,
         position: 'top-right',
       });
+
+      if (this.userUid && this.$refs.historySection) {
+        this.$nextTick(() => {
+          this.$refs.historySection.refreshHistory();
+        });
+      }
     },
+
     handleLoadingStarted() {
       this.isLoading = true;
     },
+
     handleLoadingFinished() {
       this.isLoading = false;
     },
+
     handleAnalysisFailed(error) {
       console.error('Kesalahan analisis:', error);
       this.toast.error('Gagal menganalisis gambar. Silakan coba lagi.', {
@@ -102,6 +159,34 @@ export default {
         position: 'top-right',
       });
     },
+
+    handleRateLimitHit(message) {
+      this.toast.warning(message, {
+        timeout: 4000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        position: 'top-right',
+      });
+    },
+
+    resetAnalysis() {
+      this.analysisResult = null;
+    },
+
+    showHistoryModal(historyItem) {
+      this.selectedHistoryItem = historyItem;
+      this.showModal = true;
+    },
+
+    closeHistoryModal() {
+      this.showModal = false;
+      this.selectedHistoryItem = null;
+    },
+
+    //onHistoryDeleted() {
+      //this.toast.success('Riwayat berhasil dihapus');
+    //},
+
     getIconByKategori(kategori) {
       switch (kategori.toLowerCase()) {
         case 'organik':
@@ -118,12 +203,7 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.scan-app {
-  min-height: 100vh;
-  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-}
 
 .app-container {
   max-width: 1200px;
@@ -225,6 +305,10 @@ export default {
   border-radius: 16px;
   padding: 2.5rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.history-section-component {
+  /* Additional styles for history section if needed */
 }
 
 /* Animations */

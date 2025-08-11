@@ -36,10 +36,12 @@
 <script setup>
 import { ref } from 'vue';
 import { getLogin } from '@/data/api';
-import { putAccessToken, putUserData } from '@/utils/auth'; // Tambahkan putUserData
+import { putAccessToken, putUserData } from '@/utils/auth';
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 
 const router = useRouter();
+const toast = useToast();
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
@@ -48,18 +50,20 @@ const handleLogin = async () => {
   try {
     const response = await getLogin({ email: email.value, password: password.value });
     const token = response.data?.token || response.token;
-    const userData = response.data?.user; // Ambil data user dari response
+    const userData = response.data?.user;
 
     if (response.ok && token && userData) {
       putAccessToken(token);
-      putUserData(userData); // Simpan data user ke localStorage
+      putUserData(userData);
+      toast.success('Login berhasil. Selamat datang admin!');
       router.push('/admin/new');
     } else {
-      errorMessage.value = response.message || 'Login gagal. Coba lagi.';
+      errorMessage.value = response.message || 'Login gagal. Silahkan coba lagi.';
+      toast.error(errorMessage.value);
     }
   } catch (err) {
-    errorMessage.value = 'Terjadi kesalahan jaringan';
-    console.error("Login error:", err);
+    errorMessage.value = 'Terjadi kesalahan jaringan.';
+    toast.error(errorMessage.value);
   }
 };
 </script>

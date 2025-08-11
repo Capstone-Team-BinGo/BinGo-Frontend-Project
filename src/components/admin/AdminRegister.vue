@@ -47,21 +47,29 @@
 import { ref } from 'vue';
 import { getRegistered } from '@/data/api';
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toastification';
 
 const router = useRouter();
+const toast = useToast();
 const name = ref('');
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
 
 const handleRegister = async () => {
-  const response = await getRegistered({ nama_lengkap: name.value, email: email.value, password: password.value });
+  try {
+    const response = await getRegistered({ nama_lengkap: name.value, email: email.value, password: password.value });
 
-  if (response.ok) {
-    alert('Registrasi berhasil. Silakan login.');
-    router.push('/admin/login');
-  } else {
-    errorMessage.value = response.message || 'Registrasi gagal.';
+    if (response.ok) {
+      toast.success('Registrasi berhasil. Silakan login.');
+      router.push('/admin/login');
+    } else {
+      errorMessage.value = response.message || 'Registrasi gagal.';
+      toast.error(errorMessage.value);
+    }
+  } catch (err) {
+    errorMessage.value = 'Terjadi kesalahan jaringan.';
+    toast.error(errorMessage.value);
   }
 };
 </script>

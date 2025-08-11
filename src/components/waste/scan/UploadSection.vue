@@ -1,7 +1,11 @@
 <template>
   <section class="upload-section">
     <div class="upload-options">
-      <div class="upload-btn" @click="triggerFileInput" aria-label="Upload gambar">
+      <div
+        class="upload-btn"
+        @click="triggerFileInput"
+        aria-label="Upload gambar"
+      >
         <i class="fa-solid fa-cloud-arrow-up"></i>
         <span>Unggah Gambar</span>
         <input
@@ -13,6 +17,7 @@
           style="display: none"
         />
       </div>
+
       <div class="upload-btn" id="camera-button" @click="openCamera">
         <i class="fas fa-camera"></i>
         <span>Gunakan Kamera</span>
@@ -29,52 +34,93 @@
           <i class="fas fa-times"></i>
         </button>
       </div>
+
       <img :src="imagePreview" class="image-preview" alt="Preview" />
+
+      <!-- Modified analyze button -->
       <button
         class="analyze-btn"
-        @click="analyzeImage"
+        @click="handleAnalyzeClick"
         :disabled="!imagePreview || isLoading"
       >
-        {{ isLoading ? 'Menganalisis...' : 'Analisis Gambar' }}
+        {{ isLoading ? 'Menganalisis...' : getAnalyzeButtonText }}
       </button>
     </div>
 
-  <div class="loading" :style="{ display: isLoading ? 'block' : 'none' }">
-    <div class="spinner-container">
-      <div class="spinner">
-        <div class="spinner-inner"></div>
+    <div class="loading" :style="{ display: isLoading ? 'block' : 'none' }">
+      <div class="spinner-container">
+        <div class="spinner">
+          <div class="spinner-inner"></div>
+        </div>
       </div>
+      <p class="loading-text">Sedang menganalisis gambar...</p>
+      <p class="loading-subtext">Proses mungkin memakan waktu beberapa detik</p>
     </div>
-    <p class="loading-text">Sedang menganalisis gambar...</p>
-    <p class="loading-subtext">Proses mungkin memakan waktu beberapa detik</p>
-  </div>
 
     <CameraModal
       v-if="showCameraModal"
       @close="closeCamera"
       @picture-taken="handlePictureTaken"
     />
+
+    <!-- Google Login Modal -->
+    <GoogleLoginModal
+      v-if="showLoginModal"
+      @close="closeLoginModal"
+      @login-success="onLoginSuccess"
+    />
   </section>
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import axios from 'axios';
 import CameraModal from './CameraModal.vue';
+import GoogleLoginModal from '@/components/auth/googleLogin.vue';
 
 export default {
-  components: { CameraModal },
+  components: { CameraModal, GoogleLoginModal },
+
+  setup() {
+    const isLoggedIn = ref(false);
+
+    onMounted(() => {
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        isLoggedIn.value = !!user;
+        console.log("Firebase login status:", user);
+      });
+    });
+
+    return { isLoggedIn };
+  },
+
   data() {
     return {
       imagePreview: null,
       uploadedFile: null,
       showCameraModal: false,
       isLoading: false,
+      hasReachedLimit: false, // Track if user has reached upload limit
+      showLoginModal: false, // State for showing login modal
     };
   },
+
+  computed: {
+    getAnalyzeButtonText() {
+      if (this.hasReachedLimit && !this.isLoggedIn) {
+        return 'Login untuk Melanjutkan';
+      }
+      return 'Analisis Gambar';
+    }
+  },
+
   methods: {
     triggerFileInput() {
       this.$refs.fileInput.click();
     },
+
     handleFileUpload(event) {
       const file = event.target.files[0];
       if (file) {
@@ -90,40 +136,74 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+
     openCamera() {
       this.showCameraModal = true;
     },
+
     closeCamera() {
       this.showCameraModal = false;
     },
+
     handlePictureTaken({ imagePreview, uploadedFile }) {
       this.imagePreview = imagePreview;
       this.uploadedFile = uploadedFile;
       this.closeCamera();
-      //this.$emit('file-uploaded', { imagePreview, uploadedFile });
     },
+
     clearPreview() {
       this.imagePreview = null;
       this.uploadedFile = null;
-      this.$refs.fileInput.value = ''; // Reset file input
+      this.$refs.fileInput.value = '';
       this.$emit('preview-cleared');
     },
+
+    handleAnalyzeClick() {
+      if (this.hasReachedLimit && !this.isLoggedIn) {
+        this.showLoginModal = true; // Show login modal
+        return;
+      }
+      this.analyzeImage();
+    },
+
     async analyzeImage() {
       if (!this.uploadedFile) return;
 
-      this.isLoading = true; // Set loading state
-      this.$emit('loading-started'); // Beri tahu parent komponen
+      this.$emit('reset-analysis');
+      this.isLoading = true;
+      this.$emit('loading-started');
 
       const formData = new FormData();
       formData.append('file', this.uploadedFile);
 
+      let userUid = null;
+      try {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          userUid = parsedUser.uid;
+        }
+      } catch (error) {
+        console.warn('Failed to get user data:', error);
+      }
+
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      };
+
+      if (userUid) {
+        headers['User-Uid'] = userUid;
+      } else {
+        console.log('Sending request as anonymous user');
+      }
+
       try {
         const response = await axios.post(
-          'https://whoiskywi-bingo.hf.space/predict',
+          'https://whoiskywi-trash-scan.hf.space/predict',
           formData,
-          { headers: { 'Content-Type': 'multipart/form-data' } }
+          { headers }
         );
-        // Format hasil sesuai dengan struktur yang diharapkan
+
         const result = {
           itemName: response.data.Sampah,
           type: response.data.Kategori,
@@ -132,16 +212,56 @@ export default {
           disposalSteps: response.data.LangkahPembuangan,
         };
 
+        if (response.data.debug_info) {
+          console.log('Remaining uploads:', response.data.debug_info.remaining_uploads);
+        }
+
         this.$emit('image-analyzed', result);
+
+        // Reset limit flag if analysis succeeds
+        this.hasReachedLimit = false;
+
       } catch (error) {
         console.error('Error analyzing image:', error);
-        this.$emit('analysis-failed', error); // Event baru untuk error handling
+
+        if (error.response?.status === 429) {
+          const errorData = error.response.data;
+
+          // Set flag when limit is reached for anonymous users
+          if (!this.isLoggedIn) {
+            this.hasReachedLimit = true;
+          }
+
+          this.$emit(
+            'rate-limit-hit',
+            `Batas upload terlampaui. ${errorData.message} (Upload saat ini: ${errorData.current_uploads}/3)`
+          );
+        } else {
+          this.$emit('analysis-failed', error);
+        }
       } finally {
-        this.isLoading = false; // Matikan loading
-        this.$emit('loading-finished'); // Beri tahu parent komponen
+        this.isLoading = false;
+        this.$emit('loading-finished');
       }
     },
+
+    closeLoginModal() {
+      this.showLoginModal = false;
+    },
+
+    onLoginSuccess() {
+      this.showLoginModal = false;
+      this.hasReachedLimit = false; // Reset limit after login
+    },
   },
+
+  watch: {
+    isLoggedIn(newVal) {
+      if (newVal) {
+        this.hasReachedLimit = false;
+      }
+    }
+  }
 };
 </script>
 
@@ -188,13 +308,13 @@ export default {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #4CAF50, #2E7D32);
+  background: linear-gradient(90deg, #4caf50, #2e7d32);
   transition: all 0.3s;
   transform: scaleX(0);
 }
 
 .upload-btn:hover {
-  border-color: #082E16;
+  border-color: #082e16;
   background-color: #f5f5f5;
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -206,7 +326,7 @@ export default {
 
 .upload-btn i {
   font-size: 3.5rem;
-  color: #1F7D53;
+  color: #1f7d53;
   margin-bottom: 1.5rem;
   transition: all 0.3s;
 }
@@ -231,8 +351,14 @@ export default {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .preview-header {
@@ -282,7 +408,7 @@ export default {
 }
 
 .analyze-btn {
-  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  background: linear-gradient(135deg, #4caf50, #2e7d32);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -334,7 +460,7 @@ export default {
   height: 100%;
   border: 3px solid rgba(76, 175, 80, 0.1);
   border-radius: 50%;
-  border-top: 3px solid #4CAF50;
+  border-top: 3px solid #4caf50;
   animation: spin 1s linear infinite;
   position: relative;
 }
@@ -347,7 +473,7 @@ export default {
   bottom: 10px;
   border: 2px solid transparent;
   border-radius: 50%;
-  border-top: 2px solid #2E7D32;
+  border-top: 2px solid #2e7d32;
   animation: spinReverse 1.5s linear infinite;
 }
 
@@ -375,24 +501,27 @@ export default {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
   .loading {
     padding: 1.2rem;
   }
-
   .spinner-container {
     width: 50px;
     height: 50px;
   }
-
   .loading-text {
     font-size: 1rem;
   }
-
   .loading-subtext {
     font-size: 0.8rem;
   }
@@ -403,11 +532,9 @@ export default {
     flex-direction: column;
     align-items: center;
   }
-
   .upload-btn {
     max-width: 300px;
   }
-
   .image-preview {
     max-height: 300px;
   }
@@ -417,15 +544,12 @@ export default {
   .upload-section {
     padding: 1.5rem;
   }
-
   .upload-btn {
     height: 180px;
   }
-
   .upload-btn i {
     font-size: 2.5rem;
   }
-
   .analyze-btn {
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
