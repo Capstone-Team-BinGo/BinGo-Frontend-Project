@@ -29,24 +29,87 @@
           </div>
         </div>
 
-        <UploadSection
-          @file-uploaded="handleFileUploaded"
-          @image-analyzed="handleImageAnalyzed"
-          @loading-started="handleLoadingStarted"
-          @loading-finished="handleLoadingFinished"
-          @analysis-failed="handleAnalysisFailed"
-          @rate-limit-hit="handleRateLimitHit"
-          @reset-analysis="resetAnalysis"
-          class="upload-section"
-        />
+        <!-- Scan Mode Selector -->
+        <div class="scan-mode-selector">
+          <h3 class="mode-title">Pilih Mode Pemindaian</h3>
+          <div class="mode-options">
+            <div class="mode-card" :class="{ active: scanMode === 'standard' }" @click="setScanMode('standard')">
+              <div class="mode-icon">
+                <i class="fas fa-camera"></i>
+              </div>
+              <h4>Scan Standar</h4>
+              <p>Upload atau ambil foto untuk analisis mendalam</p>
+              <div class="mode-features">
+                <span><i class="fas fa-check"></i> Hasil detail</span>
+                <span><i class="fas fa-check"></i> Simpan riwayat</span>
+                <span><i class="fas fa-check"></i> Panduan lengkap</span>
+              </div>
+            </div>
 
-        <transition name="fade-slide">
-          <ResultsSection
-            v-if="analysisResult"
-            :analysisResult="analysisResult"
-            class="results-section"
+            <div class="mode-card" :class="{ active: scanMode === 'live' }" @click="setScanMode('live')">
+              <div class="mode-icon live">
+                <i class="fas fa-video"></i>
+              </div>
+              <h4>Live Scan</h4>
+              <p>Deteksi real-time menggunakan kamera</p>
+              <div class="mode-features">
+                <span><i class="fas fa-check"></i> Real-time</span>
+                <span><i class="fas fa-check"></i> Scan otomatis</span>
+                <span><i class="fas fa-check"></i> Cepat & mudah</span>
+              </div>
+              <div class="live-badge">
+                <i class="fas fa-bolt"></i> LIVE
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Standard Scan Section -->
+        <div v-if="scanMode === 'standard'">
+          <UploadSection
+            @file-uploaded="handleFileUploaded"
+            @image-analyzed="handleImageAnalyzed"
+            @loading-started="handleLoadingStarted"
+            @loading-finished="handleLoadingFinished"
+            @analysis-failed="handleAnalysisFailed"
+            @rate-limit-hit="handleRateLimitHit"
+            @reset-analysis="resetAnalysis"
+            class="upload-section"
           />
-        </transition>
+
+          <transition name="fade-slide">
+            <ResultsSection
+              v-if="analysisResult"
+              :analysisResult="analysisResult"
+              class="results-section"
+            />
+          </transition>
+        </div>
+
+        <!-- Live Scan Section -->
+        <div v-if="scanMode === 'live'" class="live-scan-section">
+          <div class="live-scan-info">
+            <div class="info-card">
+              <i class="fas fa-info-circle"></i>
+              <div>
+                <h4>Tentang Live Scan</h4>
+                <p>Mode Live Scan memungkinkan Anda mendeteksi sampah secara real-time menggunakan kamera. Sistem akan otomatis menganalisis gambar setiap 2 detik.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="live-scan-action">
+            <button class="start-live-scan-btn" @click="startLiveScan">
+              <div class="btn-content">
+                <i class="fas fa-video"></i>
+                <div class="btn-text">
+                  <span class="btn-title">Mulai Live Scan</span>
+                  <span class="btn-subtitle">Deteksi real-time dengan kamera</span>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
 
         <!-- History Section -->
         <transition name="fade-slide">
@@ -65,6 +128,12 @@
           :historyItem="selectedHistoryItem"
           @close="closeHistoryModal"
         />
+
+        <!-- Live Scan Modal -->
+        <LiveScanModal
+          v-if="showLiveScanModal"
+          @close="closeLiveScan"
+        />
       </main>
     </div>
   </div>
@@ -75,6 +144,7 @@ import UploadSection from '../waste/scan/UploadSection.vue';
 import ResultsSection from '../waste/scan/ResultsSection.vue';
 import HistorySection from '../waste/scan/HistorySection.vue';
 import HistoryModal from '../waste/scan/HistoryModal.vue';
+import LiveScanModal from '../waste/scan/LiveScanModal.vue';
 import { useToast } from 'vue-toastification';
 
 export default {
@@ -84,6 +154,7 @@ export default {
     ResultsSection,
     HistorySection,
     HistoryModal,
+    LiveScanModal,
   },
   data() {
     return {
@@ -94,6 +165,8 @@ export default {
       showModal: false,
       selectedHistoryItem: null,
       userUid: null,
+      scanMode: 'standard', // 'standard' or 'live'
+      showLiveScanModal: false,
     };
   },
   setup() {
@@ -119,6 +192,21 @@ export default {
       }
 
       this.userUid = userUid;
+    },
+
+    setScanMode(mode) {
+      this.scanMode = mode;
+      if (mode === 'standard') {
+        this.showLiveScanModal = false;
+      }
+    },
+
+    startLiveScan() {
+      this.showLiveScanModal = true;
+    },
+
+    closeLiveScan() {
+      this.showLiveScanModal = false;
     },
 
     handleFileUploaded({ imagePreview, uploadedFile }) {
@@ -182,10 +270,6 @@ export default {
       this.showModal = false;
       this.selectedHistoryItem = null;
     },
-
-    //onHistoryDeleted() {
-      //this.toast.success('Riwayat berhasil dihapus');
-    //},
 
     getIconByKategori(kategori) {
       switch (kategori.toLowerCase()) {
@@ -293,6 +377,270 @@ export default {
   font-size: 1.1rem;
 }
 
+/* Scan Mode Selector */
+.scan-mode-selector {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.mode-title {
+  text-align: center;
+  color: #2e7d32;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.mode-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.mode-card {
+  background: #f8f9fa;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 1.8rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4CAF50, #2E7D32);
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.mode-card:hover {
+  border-color: #4CAF50;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(76, 175, 80, 0.2);
+}
+
+.mode-card:hover::before {
+  transform: scaleX(1);
+}
+
+.mode-card.active {
+  border-color: #4CAF50;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(46, 125, 50, 0.05));
+}
+
+.mode-card.active::before {
+  transform: scaleX(1);
+}
+
+.mode-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 1rem;
+  transition: all 0.3s;
+}
+
+.mode-icon.live {
+  background: linear-gradient(135deg, #FF5722, #E64A19);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.mode-card:hover .mode-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.mode-card h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.mode-card p {
+  margin: 0 0 1rem 0;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.mode-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mode-features span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.mode-features i {
+  color: #4CAF50;
+  font-size: 0.8rem;
+}
+
+.live-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #FF5722, #E64A19);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Live Scan Section */
+.live-scan-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.live-scan-info {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.info-card {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  background: linear-gradient(135deg, rgba(33, 150, 243, 0.1), rgba(21, 101, 192, 0.05));
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid #2196F3;
+}
+
+.info-card i {
+  font-size: 2rem;
+  color: #2196F3;
+  flex-shrink: 0;
+}
+
+.info-card h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.info-card p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.live-scan-action {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.start-live-scan-btn {
+  background: linear-gradient(135deg, #FF5722, #E64A19);
+  color: white;
+  border: none;
+  padding: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(255, 87, 34, 0.3);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.start-live-scan-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.start-live-scan-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.start-live-scan-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(255, 87, 34, 0.4);
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-content i {
+  font-size: 2.5rem;
+}
+
+.btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.btn-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.btn-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
 .upload-section {
   background: white;
   border-radius: 16px;
@@ -305,10 +653,6 @@ export default {
   border-radius: 16px;
   padding: 2.5rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-}
-
-.history-section-component {
-  /* Additional styles for history section if needed */
 }
 
 /* Animations */
@@ -338,9 +682,63 @@ export default {
     width: 100%;
   }
 
+  .mode-options {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-content {
+    padding: 1.2rem 2rem;
+    gap: 1rem;
+  }
+
+  .btn-content i {
+    font-size: 2rem;
+  }
+
+  .btn-title {
+    font-size: 1.2rem;
+  }
+
+  .btn-subtitle {
+    font-size: 0.8rem;
+  }
+
   .upload-section,
   .results-section {
     padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 1rem;
+  }
+
+  .feature-highlight {
+    padding: 1.5rem;
+  }
+
+  .scan-mode-selector {
+    padding: 1.5rem;
+  }
+
+  .mode-card {
+    padding: 1.5rem;
+  }
+
+  .info-card {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .btn-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .btn-text {
+    align-items: center;
   }
 }
 </style>
